@@ -20,8 +20,8 @@ class Token:
 class Tokenizer:
 	# Take in raw source code
 	def __init__(self, sourcecode):
-		self.key_words = ["whip", "worship", "have", "her", "herself", "him", "himself", "them", "themself", "it", "itself",
-																				"when", "if", "moreplease", "endif"]
+		self.key_words = ["whip", "worship", "have", "her", "herself", "him", "himself", "them", "themself", "it",
+						  "itself", "when", "if", "moreplease", "endif", "is", "over"]
 		self.tokens = []
 		self.words = []
 
@@ -94,9 +94,9 @@ class Tokenizer:
 				# Convert number to token
 				elif numparse.within_number(word):
 					number_start = i
-					while i < len(line) - 1 and numparse.within_number(line[i+1]):
-						i+=1
-					number = " ".join(line[number_start:i+1])
+					while i < len(line) - 1 and numparse.within_number(line[i + 1]):
+						i += 1
+					number = " ".join(line[number_start:i + 1])
 					self.tokens.append(Token("fraction-literal", number, numparse.to_fraction(number), line_number))
 
 				# Convert quote to token
@@ -107,23 +107,23 @@ class Tokenizer:
 					while i < len(line) and line[i][-2] == '\\':
 						if i >= len(line):
 							raise error.OrgyTokenizerError("Multiline comments are not supported (line {})".format(line_number))
-						buffer += line[i+1]
+						buffer += line[i + 1]
 						i += 1
 
 					# Interpret quote
 					quote = ast.literal_eval(buffer)
 
-					self.tokens.append(Token("string-literal", buffer, quote, line_number))  # Todo, evaluate quote as "value"
+					self.tokens.append(Token("string-literal", buffer, quote, line_number))
 
 				# Convert names to token
 				else:
 					name_start = i
-					while i<len(line) - 1 and line[i + 1].lower() not in self.key_words and line[i + 1][0] != '"' and not numparse.within_number(line[i + 1]):
+					while i < len(line) - 1 and line[i + 1].lower() not in self.key_words and line[i + 1][0] != '"'\
+						and not numparse.within_number(line[i + 1]):
 						i += 1
 					name = " ".join(line[name_start:i + 1])
 					self.tokens.append(Token("name", name, name[0:name.index("'") if "'" in name else len(name)].lower(), line_number))
 				i += 1
-
 
 
 # Test

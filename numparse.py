@@ -45,13 +45,13 @@ def _word_to_int(word):
 def _word_to_int_safe(word):
 	number = _word_to_int(word)
 	if number is None:
-		raise error.OrgyNumberError(word + " is not a valid number")
+		raise error.OrgyNumberError("{} is not a valid number".format(word))
 	return number
 
 
 # Convert a "triple" (anything split by thousand, million, etc) to an integer
 def _triple_to_int(triple_string):
-	not_valid = "'" + triple_string + "' is not a valid triple"
+	not_valid = "'{}' is not a valid triple".format(triple_string)
 	# Convert string to list
 	triple = triple_string.split()
 
@@ -59,11 +59,11 @@ def _triple_to_int(triple_string):
 	if len(triple) == 0:
 		raise error.OrgyNumberError("Triple is empty")
 	elif len(triple) >= 3 and triple[2].lower() != "and":
-		raise error.OrgyNumberError("Expected 'and', found '" + triple[2] + "'")
+		raise error.OrgyNumberError("Expected 'and', found '{}'".format(triple[2]))
 	elif len(triple) == 3:
 		raise error.OrgyNumberError(not_valid)
 	elif len(triple) > 5:
-		raise error.OrgyNumberError("Triple '" + triple_string + "' is too long (max 5 words)")
+		raise error.OrgyNumberError("Triple '{}' is too long (max 5 words)".format(triple_string))
 
 	# Start parsing
 
@@ -73,7 +73,7 @@ def _triple_to_int(triple_string):
 		if 0 < number < 100:
 			return number
 		else:
-			raise error.OrgyNumberError("'" + triple[0] + "' by itself is not a valid triple")
+			raise error.OrgyNumberError("'{}' by itself is not a valid triple".format(triple[0]))
 
 	# Triple is of the form (one hundred) or (twenty two)
 	elif len(triple) == 2:
