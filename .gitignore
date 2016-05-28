@@ -1,0 +1,11 @@
+*
+!*/
+
+!Makefile
+!.gitignore
+
+!*.md
+!*.py
+!*.c
+!*.h
+!*.inc
