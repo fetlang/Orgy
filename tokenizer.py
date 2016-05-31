@@ -20,8 +20,18 @@ class Token:
 class Tokenizer:
 	# Take in raw source code
 	def __init__(self, sourcecode):
+		# Proper key word
 		self.key_words = ["whip", "worship", "have", "her", "herself", "him", "himself", "them", "themself", "it",
-						  "itself", "when", "if", "moreplease", "endif", "is", "over"]
+						  "itself", "when", "if", "is"]
+		# Proper key words involving more than one word
+		self.compound_words = ["is over", "is under","more please", "tie up", "end if"]
+		# Words that make up a proper compound key word, but are not proper keywords themselves
+		# They are, however, still reserved
+		self.partial_words = list(set((" ".join(self.compound_words)).split()) & set(self.key_words))
+		# All reserved words
+		self.reserved_words = list(set(self.key_words + self.partial_words))
+
+		# List of tokens (permanent) and words(temporary)
 		self.tokens = []
 		self.words = []
 
