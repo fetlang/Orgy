@@ -1,8 +1,10 @@
 #ifndef ORGY_CHAIN_H_
 #    define ORGY_CHAIN_H_
+#    include "fraction.h"
+
 /* Chains (strings) are represented as linked lists*/
 typedef struct Link {
-	char value;
+	Fraction value;
 	struct Link *prev;	/* Starts at NULL */
 	struct Link *next;	/* Ends at NULL */
 } Link;
@@ -18,8 +20,17 @@ void init_chain(Chain * chain);
 /* Delete all links in chain and set start to NULL */
 void clear_chain(Chain * chain);
 
-/* Concat a cstring to a chain*/
+/* Append a cstring to a chain*/
 void append_cstr_to_chain(Chain * chain, const char *text);
+
+/* Literally append fraction as is to chain*/
+void append_flink_to_chain(Chain * chain, Fraction fraction);
+
+/* Convert and append fraction to chain*/
+void append_fraction_to_chain(Chain * chain, Fraction fraction);
+
+/* Append another chain to chain(hard copy)*/
+void append_chain_to_chain(Chain * chain1, Chain chain2);
 
 /* Traverse chain and print each value*/
 void print_chain(Chain chain);

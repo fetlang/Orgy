@@ -45,7 +45,8 @@ void append_cstr_to_chain(Chain * chain, const char *text)
 		Link *new_link = (Link *) malloc(sizeof(Link));
 		new_link->next = NULL;
 		new_link->prev = it;
-		new_link->value = text[k];
+		new_link->value.num = (OrgyInt) text[k];
+		new_link->value.den = 1;
 
 		/* Increment length */
 		chain->length++;
@@ -63,11 +64,28 @@ void append_cstr_to_chain(Chain * chain, const char *text)
 
 }
 
+void append_flink_to_chain(Chain * chain, Fraction fraction)
+{
+	/* Create new link*/
+	Link* new_link = (Link*) malloc(sizeof(Link));
+	new_link->value = fraction;
+	
+	/* Insert at end*/
+	new_link->prev = chain->end;
+	chain->end = new_link;
+	if(chain->start==NULL){
+		chain->start=new_link;
+	}
+	
+	/* Increment length*/
+	chain->length++;	
+}
+
 void print_chain(Chain chain)
 {
 	Link *it = chain.start;
 	while (it != NULL) {
-		putchar(it->value);
+		putchar((char)(it->value.num / it->value.den));
 		it = it->next;
 	}
 }
