@@ -1,4 +1,7 @@
-#include "fraction.h"
+#ifndef ORGY_FRACTION_MATH_H_
+#    define ORGY_FRACTION_MATH_H_
+
+#    include "fraction.h"
 /*
 	Fraction math rules:
 		1) 0/0 is not allowed
@@ -19,3 +22,4 @@ Fraction modulus_fractions(Fraction a, Fraction b);
 
 /* Estimation math*/
 Fraction exponentiate_fractions(Fraction a, Fraction b);
+#endif

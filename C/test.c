@@ -1,10 +1,13 @@
 #include "fraction_math.h"
+#include "chain.h"
 #include <stdio.h>
-int main(){
-	Fraction a;
-	a.num = 9;
-	a.den = 1;
-	a = add_fractions(a,a);
-	printf("%i/%i\n", a.num,a.den);
-return 0;
+int main()
+{
+	Chain chain;
+	init_chain(&chain);
+	append_cstr_to_chain(&chain,
+			     "Bless my soul, Herc was on a role\0");
+	print_chain(chain);
+	clear_chain(&chain);
+	return 0;
 }
