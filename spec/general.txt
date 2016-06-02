@@ -1,0 +1,69 @@
+Special vars:
+MISTRESS - stdout
+MASTER - stdin
+NAUGHTY - 0
+
+
+String operations:
+TIE UP X [not applicable]
+Concats "" to X
+HAVE [str var|num var] TIE UP X
+x = x+y
+MAKE X MOAN/SCREAM [str lit|num lit]
+x= x+y
+HAVE MISTRESS MOAN/SCREAM X
+stdout=stdout + x
+
+MAKE X Beg
+Replace X with STDIN
+BEG X
+REPLACE STDIN WITH X
+
+
+Numeric operations:
+WHIP - subtract
+WORSHIP - add
+LICK - Multiply
+FLOG - Divide
+PENETRATE - modulus(int only, else runtime error)
+TICKLE - exponent
+FEEL UP - assign/copy
+
+HAVE Y [operator] X (y is frac var)
+X = x operator y
+[operator] X [Y times] (y is frac lit)
+X = x operator y
+[operator X]
+X = x operator 1
+
+Functions:
+[x is assumed to be string, but can be frac]
+SCREAM x
+print(x+"\n")
+MOAN X
+print(x)
+Make X Beg
+input(x)
+
+
+Control Statements
+IF...ENDIF
+WHILE...more please
+UNTIL...more please
+DECLARE SAFEWORD [safeword]
+[safeword]
+
+Comparison
+X IS Y
+X IS OVER Y
+X IS UNDER Y
+Comparisons must be of same type
+
+Pronouns:
+Four genders that can be associated
+with a variable. A variable does not
+start out as any of these. 
+masculine - him/himself
+feminine - her/herself
+neutral - they/themself
+nonperson - it/itself

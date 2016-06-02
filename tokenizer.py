@@ -25,7 +25,7 @@ class Tokenizer:
 		self.key_words = ["whip", "worship", "have", "her", "herself", "him", "himself", "them", "themself", "it",
 						  "itself", "when", "if", "is"]
 		# Proper key words involving more than one word
-		self.compound_words = ["is over", "is under","more please", "tie up", "end if","feel up"]
+		self.compound_words = ["is over", "is under","more please", "tie up", "end if","feel up","is not"]
 		# All reserved words
 		self.reserved_words = list(set(self.key_words + " ".join(self.compound_words).split()))
 		print(self.reserved_words)
@@ -101,6 +101,8 @@ class Tokenizer:
 					if i+1<len(line) and " ".join(line[i:i+2]).lower() in self.compound_words:
 						word = " ".join(line[i:i+2])
 						i+=1
+					elif word.lower() not in self.key_words:
+						raise error.OrgyTokenizerError("line {}: expected another word after {}", line_number, word)
 					self.tokens.append(Token("keyword", word, word.lower(), line_number))
 
 				# Convert number to token

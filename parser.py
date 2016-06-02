@@ -5,7 +5,7 @@ class Node (tokenizer.Token):
 	def __init__(self, kind, literal = None, value = None, line = None, children = None):
 		# Kind of token
 		self.kind = kind
-		assert self.kind in ["keyword", "fraction-literal", "chain-literal", "name"]
+		assert self.kind in ["keyword", "fraction-literal", "chain-literal", "safeword", "variable", "special"]
 		# The raw value
 		self.literal = literal
 		# What the value actually means
@@ -48,7 +48,7 @@ class Parser:
 			if token.kind == "keyword":
 			
 				# Basic fraction operation
-				if token.value in ["have","whip","worship","feel up"]
-					root.append(Node("fraction-operation",None, None, token.line))
+				if token.value in ["have","make","tie up", "beg", "whip","worship","feel up"]
+					root.append(Node("operation",None, None, token.line))
 					if token.value == "have":
-						
+						root[-1].insert(Node5r)

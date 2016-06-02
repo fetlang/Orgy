@@ -66,26 +66,63 @@ void append_cstr_to_chain(Chain * chain, const char *text)
 
 void append_flink_to_chain(Chain * chain, Fraction fraction)
 {
-	/* Create new link*/
-	Link* new_link = (Link*) malloc(sizeof(Link));
+	/* Create new link */
+	Link *new_link = (Link *) malloc(sizeof(Link));
 	new_link->value = fraction;
-	
-	/* Insert at end*/
+
+	/* Insert at end */
 	new_link->prev = chain->end;
 	chain->end = new_link;
-	if(chain->start==NULL){
-		chain->start=new_link;
+	if (chain->start == NULL) {
+		chain->start = new_link;
 	}
-	
-	/* Increment length*/
-	chain->length++;	
+
+	/* Increment length */
+	chain->length++;
+}
+
+void append_chain_to_chain(Chain * chain1, Chain chain2)
+{
+	Link *it = chain2.start;
+	if (it == NULL) {
+		return;
+	}
+	if (chain1->start == NULL) {
+		/* Set up iterator as first node */
+		chain1->start = (Link *) malloc(sizeof(Link));
+		chain1->start->value = it->value;
+		chain1->start->prev = NULL;
+		chain1->start->next = NULL;
+		chain1->end = chain1->start;
+	} else {
+		/* Set up iterator at end */
+		chain1->end->next = (Link *) malloc(sizeof(Link));
+		chain1->end->next->prev = chain1->end;
+		chain1->end->next->next = NULL;
+		chain1->end = chain1->end->next;
+		chain1->end->value = it->value;
+	}
+	while (it->next != NULL) {
+		/* Forward iterator */
+		it = it->next;
+		/* Add node at end */
+		chain1->end->next = (Link *) malloc(sizeof(Link));
+		chain1->end->next->prev = chain1->end;
+		chain1->end->next->next = NULL;
+		chain1->end = chain1->end->next;
+		chain1->end->value = it->value;
+	}
+
+	/* Increment length */
+	chain1->length += chain2.length;
+
 }
 
 void print_chain(Chain chain)
 {
 	Link *it = chain.start;
 	while (it != NULL) {
-		putchar((char)(it->value.num / it->value.den));
+		putchar((char) (it->value.num / it->value.den));
 		it = it->next;
 	}
 }

@@ -3,11 +3,17 @@
 #include <stdio.h>
 int main()
 {
-	Chain chain;
-	init_chain(&chain);
-	append_cstr_to_chain(&chain,
-			     "Bless my soul, Herc was on a role\0");
-	print_chain(chain);
-	clear_chain(&chain);
+	Chain a;
+	Chain b;
+	init_chain(&a);
+	init_chain(&b);
+	append_cstr_to_chain(&a, "I'm like a porno star,\0");
+	append_cstr_to_chain(&b, " I come so hard\0");
+	append_cstr_to_chain(&b, ". I can't go back to my virginity\n");
+	append_chain_to_chain(&a, b);
+	print_chain(a);
+	print_chain(b);
+	clear_chain(&a);
+	clear_chain(&b);
 	return 0;
 }
