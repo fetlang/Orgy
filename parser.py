@@ -13,12 +13,12 @@ class Node (tokenizer.Token):
 		# Line number found on
 		self.line = line
 		# Child nodes
-		self.children = [] if children == None else children
+		self.children = [] if children is None else children
 		
 # Variable
 class Variable:
 	def __init__(self, kin, gender=None, iv=None):
-		self.kind = kin; # Can be fraction or chain
+		self.kind = kin # Can be fraction or chain
 		assert self.kind=="fraction" or self.kind=="chain"
 		
 		# Male, female, neutral, nonperson, None
@@ -35,7 +35,7 @@ class Parser:
 		# syntax tree
 		tree = Node()
 		Node.kind = "root"
-		_parse(tree);
+		self._parse(tree);
 		
 	def _parse(self, root):
 		if_block = 0

@@ -4,7 +4,7 @@
 
 static void reduce_fraction(Fraction * a)
 {
-	OrgyInt max;
+	FractionInt max;
 	unsigned int c;
 
 	/* Check for negative error */
@@ -72,6 +72,7 @@ Fraction subtract_fractions(Fraction a, Fraction b)
 
 Fraction multiply_fractions(Fraction a, Fraction b)
 {
+	/* Multiply numerator to numerator and denominator to denominator */
 	a.num *= b.num;
 	a.den *= b.den;
 	reduce_fraction(&a);
@@ -80,6 +81,7 @@ Fraction multiply_fractions(Fraction a, Fraction b)
 
 Fraction divide_fractions(Fraction a, Fraction b)
 {
+	/* Multiply numerator with denominator and denominator with numerator */
 	a.num *= b.den;
 	a.den *= b.num;
 	reduce_fraction(&a);
@@ -94,4 +96,70 @@ Fraction modulus_fractions(Fraction a, Fraction b)
 	a.num %= b.num;
 	reduce_fraction(&a);
 	return a;
+}
+
+Fraction exponentiate_fractions(Fraction a, Fraction b)
+{
+	int reverse = 0;
+	FractionInt i = 0;
+	Fraction temp;
+
+	/* Check for 0^0 error */
+	if((a.num == 0 || a.den ==0) && (b.num == 0 || b.num == 0)){
+		runtime_error("cannot exponentiate zero or infinity to zero or infinity");
+	}
+
+	/* Check if inverse needs to be took */
+	if (b.num < 0) {
+		reverse = 1;
+		b.num = -b.num;
+	}
+
+	/* Exponentiate a's numerator with b's numerator */
+	temp = a;
+	a.num = 1;
+	a.den = 1;
+	for (i = 0; i < b.num; i++) {
+		a.num *= temp.num;
+		a.den *= temp.den;
+	}
+
+	/* Check if a's num can't be rooted by b's denominator */
+	if (a.num < 0 && b.den % 2 == 0) {
+		runtime_error
+		    ("cannot take even-number root of a negative number");
+	}
+	printf("[%i/%i][%i/%i]\n",a.num, a.den, b.num, b.den);
+	/* Root a */
+	a.num = (FractionInt) pow((double) a.num, 1 / ((double) b.den));
+	printf("[%i/%i][%i/%i]\n",a.num, a.den, b.num, b.den);
+	a.den = (FractionInt) pow((double) a.den, 1 / ((double) b.den));
+	printf("[%i/%i][%i/%i]\n",a.num, a.den, b.num, b.den);
+	/* Reduce, and inverse if necessary */
+	if (reverse) {
+		i = a.den;
+		a.den = a.num;
+		a.num = i;
+	}
+	reduce_fraction(&a);
+	printf("[%i/%i][%i/%i]\n",a.num, a.den, b.num, b.den);
+	return a;
+}
+
+int compare_fractions(Fraction a, Fraction b){
+	/* If whole numbers or infinities, just compare numerators */
+	if((a.den == 1 && b.den == 1) || (a.den==0 && b.den==0)){
+		return a.num>b.num?1:a.num<b.num?-1:0;
+	}
+
+	/* Infinitite number vs finite number */
+	if(a.den == 0){
+		return a.num > 0 ? 1 : -1;
+	}
+	if(b.den == 0){
+		return b.num > 0 ? -1 : 1;
+	}
+
+	/* Everything else */
+	return a.num * b.den > b.num * a.den ? 1 : a.num * b.den < b.num * a.den ? -1 : 0;
 }

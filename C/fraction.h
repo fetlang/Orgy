@@ -4,7 +4,7 @@
 
 /* Fraction structure for Orgy */
 typedef struct OrgyFractionStructure {
-	OrgyInt num;		/* numerator */
-	OrgyInt den;		/* denominator */
+	FractionInt num;		/* numerator */
+	FractionInt den;		/* denominator */
 } Fraction;
 #endif

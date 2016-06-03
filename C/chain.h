@@ -9,7 +9,7 @@ typedef struct Link {
 	struct Link *next;	/* Ends at NULL */
 } Link;
 typedef struct OrgyChainStructure {
-	unsigned int length;
+	ChainLengthInt length;
 	Link *start;
 	Link *end;
 } Chain;

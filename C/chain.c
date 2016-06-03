@@ -39,13 +39,13 @@ void append_cstr_to_chain(Chain * chain, const char *text)
 	Link *it = chain->end;
 
 	/* Go through text */
-	unsigned int k = 0;
+	ChainLengthInt k = 0;
 	for (; text[k] != '\0'; k++) {
 		/* Make new link */
 		Link *new_link = (Link *) malloc(sizeof(Link));
 		new_link->next = NULL;
 		new_link->prev = it;
-		new_link->value.num = (OrgyInt) text[k];
+		new_link->value.num = (FractionInt) text[k];
 		new_link->value.den = 1;
 
 		/* Increment length */

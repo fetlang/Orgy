@@ -20,6 +20,9 @@ Fraction multiply_fractions(Fraction a, Fraction b);
 Fraction divide_fractions(Fraction a, Fraction b);
 Fraction modulus_fractions(Fraction a, Fraction b);
 
+/* Comparative math */
+int compare_fractions(Fraction a, Fraction b);
+
 /* Estimation math*/
 Fraction exponentiate_fractions(Fraction a, Fraction b);
 #endif
