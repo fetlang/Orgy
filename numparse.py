@@ -55,6 +55,10 @@ def _triple_to_int(triple_string):
 	# Convert string to list
 	triple = triple_string.split()
 
+	# Remove "and" at beginning
+	if triple[0].lower() == "and":
+		triple = triple[1::]
+
 	# Check for basic errors
 	if len(triple) == 0:
 		raise error.OrgyNumberError("Triple is empty")
@@ -179,7 +183,7 @@ def within_number(word):
 
 # Test
 if __name__ == "__main__":
-		line = "negative three billion forty-two million five thousand two hundred and eighty nine over six"
+		line = "negative three billion forty-two million five thousand and six"
 		print(to_fraction(line.lower()).to_string())
 		print(to_fraction(line.upper()).to_string())
 		print(to_fraction("one").to_string())

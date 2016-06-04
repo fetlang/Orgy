@@ -102,7 +102,7 @@ class Tokenizer:
 						word = " ".join(line[i:i + 2])
 						i += 1
 					elif word.lower() not in self.key_words:
-						raise error.OrgyTokenizerError("line {}: expected another word after {}".format(line_number, word))
+						raise error.OrgyTokenizerError("expected another word after {}".format(word), line_number)
 					self.tokens.append(Token("keyword", word, word.lower(), line_number))
 
 				# Convert number to token

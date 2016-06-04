@@ -1,11 +1,18 @@
 import tokenizer
+import keywords
 
 # Syntax tree node
-class Node (tokenizer.Token):
-	def __init__(self, kind, literal = None, value = None, line = None, children = None):
-		# Kind of token
-		self.kind = kind
-		assert self.kind in ["keyword", "fraction-literal", "chain-literal", "safeword", "variable", "special"]
+class Node:
+	def __init__(self, category, subcategory=None, literal=None, value=None, line=None, children=None):
+		# Category of token
+		self.category = category
+		assert self.category in ["root", "literal", "safeword", "variable", "stream",
+								 "operation", "pronoun"]
+
+		# Subcategory of token
+		self.subcategory = subcategory
+		assert self.subcategory in [None, "fraction", "chain", "input", "output"] or self.subcategory in keywords.operators
+
 		# The raw value
 		self.literal = literal
 		# What the value actually means
@@ -14,41 +21,38 @@ class Node (tokenizer.Token):
 		self.line = line
 		# Child nodes
 		self.children = [] if children is None else children
-		
-# Variable
-class Variable:
-	def __init__(self, kin, gender=None, iv=None):
-		self.kind = kin # Can be fraction or chain
-		assert self.kind=="fraction" or self.kind=="chain"
-		
-		# Male, female, neutral, nonperson, None
-		self.gender = gender
-		assert self.gender in ["male", "female", "neutral", "nonperson", None]
-		
-		# Default value
-		self.initial_value = iv
+
 	
 # Parser object converts a list of tokens into a syntax tree, to be
 # passed to the transcompiler (to be passed to the C Compiler)
 class Parser:
 	def __init__(self, tokens):
 		# syntax tree
-		tree = Node()
-		Node.kind = "root"
-		self._parse(tree);
+		self.tokens = tokens
+		tree = Node("root")
+		self._parse(tree)
+		self.safewords = []
+
+	def _token_to_node(self, token, line=None):
+		if token.kind == "name":
+			if token.value in self.safewords:
+				node = Node("safeword", literal=token.literal, value=token.value, line=token.line)
+			else:
+				node = Node("variable", literal=token.literal, value=token.value, line=token.line)
+
 		
 	def _parse(self, root):
 		if_block = 0
 		while_block = 0  # Includes both while and until
 		
 		# Go through tokens
-		for i in range(len(tokens)):
-			token = tokens[i]
+		for i in range(len(self.tokens)):
+			token = self.tokens[i]
 			
 			if token.kind == "keyword":
 			
-				# Basic fraction operation
-				if token.value in ["have","make","tie up", "beg", "whip","worship","feel up"]
-					root.append(Node("operation",None, None, token.line))
+				# Basic operation
+				if token.value in ["have","make"] + keywords.operators:
+					root.append(Node("operation", line=token.line))
 					if token.value == "have":
-						root[-1].insert(Node5r)
+						root[-1].insert(self._token_to_node(self.tokens[i+1]))

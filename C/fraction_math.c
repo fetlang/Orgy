@@ -49,9 +49,10 @@ static void reduce_fraction(Fraction * a)
 Fraction add_fractions(Fraction a, Fraction b)
 {
 	Fraction new_frac;
+
 	/* Add fractions with different denominators */
 	if (a.den != b.den) {
-		new_frac.num = a.num * b.den + b.num * a.den;
+		a.num = a.num * b.den + b.num * a.den;
 		new_frac.den = a.den * b.den;
 		/* Add fractions with different denominators */
 	} else {

@@ -1,0 +1,1 @@
+operators = ["whip", "worship", "tie up", "tickle", "penetrate"]
