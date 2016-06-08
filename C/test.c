@@ -1,35 +1,35 @@
 #include "fraction_math.h"
 #include "chain.h"
+#include "chain_math.h"
 #include <stdio.h>
 int main()
 {
 
 	Chain a;
-	Chain b;
-	printf("Chain Test\n");
+	Fraction b;
 	init_chain(&a);
-	init_chain(&b);
-	append_cstr_to_chain(&a, "I'm like a porno star,\0");
-	append_cstr_to_chain(&b, " I come so hard\0");
-	append_cstr_to_chain(&b, ". I can't go back to my virginity\n");
-	append_chain_to_chain(&a, b);
-	print_chain(a);
-	print_chain(b);
-	clear_chain(&a);
-	clear_chain(&b);
-	{
 
-		Fraction a;
-		Fraction b;
-		Fraction* c;
-		printf("Fraction Test (exp)\n");
-		a.num = 50;
-		a.den = 1;
-		b.num = 3;
-		b.den = 5;
-		*c = exponentiate_fractions(a, b);
-		printf("%i/%i\n", c->num, c->den);
+	b.num = 3;
+	b.den = 1;
 
-	}
+	append_flink_to_chain(&a, b);
+
+
+	b.num = 5;
+	b.den = 1;
+
+	append_flink_to_chain(&a, b);
+
+	b.num = 11;
+	b.den = 1;
+
+	append_flink_to_chain(&a, b);
+    print_chain_numerically(a);
+    printf("\nCalculating standard deviation\n");
+	b = chain_stddev(a);
+
+
+	printf("%ji/%ji\n", b.num, b.den);
+
 	return 0;
 }

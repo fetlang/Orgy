@@ -32,6 +32,9 @@ void append_fraction_to_chain(Chain * chain, Fraction fraction);
 /* Append another chain to chain(hard copy)*/
 void append_chain_to_chain(Chain * chain1, Chain chain2);
 
-/* Traverse chain and print each value*/
+/* Traverse chain and print each value as character*/
 void print_chain(Chain chain);
+
+/* Traverse chain and print each value as fraction */
+void print_chain_numerically(Chain chain);
 #endif

@@ -24,5 +24,5 @@ Fraction modulus_fractions(Fraction a, Fraction b);
 int compare_fractions(Fraction a, Fraction b);
 
 /* Estimation math*/
-Fraction exponentiate_fractions(Fraction a, Fraction b);
+Fraction pow_fractions(Fraction a, Fraction b);
 #endif

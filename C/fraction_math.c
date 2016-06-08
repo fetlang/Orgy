@@ -1,11 +1,25 @@
+#include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "fraction_math.h"
 #include "error.h"
-#include <math.h>
+#if __STDC_VERSION__ >= 199901L
+#define abs llabs
+#define pow powl
+#define long_double long double
+#else
+#define abs labs
+#define long_double double
+#endif
+
+
+
 
 static void reduce_fraction(Fraction * a)
 {
 	FractionInt max;
-	unsigned int c;
+	FractionInt c;
+
 
 	/* Check for negative error */
 	if (a->den < 0) {
@@ -38,7 +52,7 @@ static void reduce_fraction(Fraction * a)
 
 	/* Reduce by odd numbers */
 	for (c = 3; c < max; c += 2) {
-		while (a->num % c == 0 && a->den % c == 0) {
+		while (((a->num % c) == 0) && ((a->den % c) == 0)) {
 			a->num /= c;
 			a->den /= c;
 		}
@@ -51,14 +65,9 @@ Fraction add_fractions(Fraction a, Fraction b)
 	Fraction new_frac;
 
 	/* Add fractions with different denominators */
-	if (a.den != b.den) {
-		a.num = a.num * b.den + b.num * a.den;
-		new_frac.den = a.den * b.den;
-		/* Add fractions with different denominators */
-	} else {
-		new_frac.num = a.num + b.num;
-		new_frac.den = a.den;
-	}
+	new_frac.num = a.num * b.den + b.num * a.den;
+	new_frac.den = a.den * b.den;
+
 	/* Reduce and return */
 	reduce_fraction(&new_frac);
 	return new_frac;
@@ -99,11 +108,17 @@ Fraction modulus_fractions(Fraction a, Fraction b)
 	return a;
 }
 
-Fraction exponentiate_fractions(Fraction a, Fraction b)
+Fraction pow_fractions(Fraction a, Fraction b)
 {
 	int reverse = 0;
 	FractionInt i = 0;
 	Fraction temp;
+
+    /* Increase accuracy */
+    if(a.den > 1){
+        a.num *= 256;
+        a.den *= 256;
+    }
 
 	/* Check for 0^0 error */
 	if((a.num == 0 || a.den ==0) && (b.num == 0 || b.num == 0)){
@@ -130,12 +145,13 @@ Fraction exponentiate_fractions(Fraction a, Fraction b)
 		runtime_error
 		    ("cannot take even-number root of a negative number");
 	}
-	printf("[%i/%i][%i/%i]\n",a.num, a.den, b.num, b.den);
+
 	/* Root a */
-	a.num = (FractionInt) pow((double) a.num, 1 / ((double) b.den));
-	printf("[%i/%i][%i/%i]\n",a.num, a.den, b.num, b.den);
-	a.den = (FractionInt) pow((double) a.den, 1 / ((double) b.den));
-	printf("[%i/%i][%i/%i]\n",a.num, a.den, b.num, b.den);
+	if(b.den != 1){
+        a.num = (FractionInt) pow((long_double) a.num, 1 / ((long_double) b.den));
+        a.den = (FractionInt) pow((long_double) a.den, 1 / ((long_double) b.den));
+	}
+
 	/* Reduce, and inverse if necessary */
 	if (reverse) {
 		i = a.den;
@@ -143,7 +159,6 @@ Fraction exponentiate_fractions(Fraction a, Fraction b)
 		a.num = i;
 	}
 	reduce_fraction(&a);
-	printf("[%i/%i][%i/%i]\n",a.num, a.den, b.num, b.den);
 	return a;
 }
 
