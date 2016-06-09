@@ -75,8 +75,8 @@ void append_flink_to_chain(Chain * chain, Fraction fraction)
 	new_link->next = NULL;
 	if (chain->start == NULL) {
 		chain->start = new_link;
-	}else{
-	    chain->end->next = new_link;
+	} else {
+		chain->end->next = new_link;
 	}
 	chain->end = new_link;
 
@@ -125,17 +125,29 @@ void print_chain(Chain chain)
 {
 	Link *it = chain.start;
 	while (it != NULL) {
+		/* Display item as character */
 		putchar((char) (it->value.num / it->value.den));
+
+		/* Forward iterator */
 		it = it->next;
 	}
 }
 
 void print_chain_numerically(Chain chain)
 {
-    printf("(");
 	Link *it = chain.start;
+	printf("(");
 	while (it != NULL) {
-	    printf("%ji/%ji, ", it->value.num, it->value.den);
+		/* Display item numerator as integer */
+		printf("%s%" FRACTION_INT_FORMATTER,
+		       it != chain.start ? ", " : "", it->value.num);
+
+		/* Display denominator if not 1 */
+		if (it->value.den != 1) {
+			printf("/%" FRACTION_INT_FORMATTER, it->value.den);
+		}
+
+		/* Forward iterator */
 		it = it->next;
 	}
 	printf(")");

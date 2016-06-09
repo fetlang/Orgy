@@ -14,11 +14,14 @@
 */
 
 /* Exact rational math*/
+/* Fraction math */
 Fraction add_fractions(Fraction a, Fraction b);
 Fraction subtract_fractions(Fraction a, Fraction b);
 Fraction multiply_fractions(Fraction a, Fraction b);
 Fraction divide_fractions(Fraction a, Fraction b);
+/* Integer math (error if non integer)*/
 Fraction modulus_fractions(Fraction a, Fraction b);
+Fraction factorial_fraction(Fraction a);
 
 /* Comparative math */
 int compare_fractions(Fraction a, Fraction b);

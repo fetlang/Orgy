@@ -1,5 +1,5 @@
 #ifndef ORGY_ERROR_H_
 #    define ORGY_ERROR_H_
-/* Tell user message and exit*/
+/* Show user error message and exit */
 void runtime_error(const char *msg);
 #endif

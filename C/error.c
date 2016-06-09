@@ -5,5 +5,5 @@
 void runtime_error(const char *msg)
 {
 	fprintf(stderr, "runtime error: %s\n", msg);
-	exit(1);
+	exit(EXIT_FAILURE);
 }

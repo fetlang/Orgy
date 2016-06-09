@@ -1,15 +1,15 @@
 #include <math.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include "fraction_math.h"
 #include "error.h"
+#define POW_ACCURACY 256
 #if __STDC_VERSION__ >= 199901L
-#define abs llabs
-#define pow powl
-#define long_double long double
+#    define abs llabs
+#    define pow powl
+#    define long_double long double
 #else
-#define abs labs
-#define long_double double
+#    define abs labs
+#    define long_double double
 #endif
 
 
@@ -100,11 +100,16 @@ Fraction divide_fractions(Fraction a, Fraction b)
 
 Fraction modulus_fractions(Fraction a, Fraction b)
 {
+	/* Reduce fraction before checking errors */
+	reduce_fraction(&a);
 	if (a.den != 1 || b.den != 1) {
 		runtime_error("cannot mod non-integers");
 	}
+
+	/* Take modulus */
 	a.num %= b.num;
-	reduce_fraction(&a);
+
+	/* No need to reduce since denominator is 1 */
 	return a;
 }
 
@@ -114,15 +119,16 @@ Fraction pow_fractions(Fraction a, Fraction b)
 	FractionInt i = 0;
 	Fraction temp;
 
-    /* Increase accuracy */
-    if(a.den > 1){
-        a.num *= 256;
-        a.den *= 256;
-    }
+	/* Increase accuracy */
+	if (a.den > 1) {
+		a.num *= POW_ACCURACY;
+		a.den *= POW_ACCURACY;
+	}
 
 	/* Check for 0^0 error */
-	if((a.num == 0 || a.den ==0) && (b.num == 0 || b.num == 0)){
-		runtime_error("cannot exponentiate zero or infinity to zero or infinity");
+	if ((a.num == 0 || a.den == 0) && (b.num == 0 || b.num == 0)) {
+		runtime_error
+		    ("cannot exponentiate zero or infinity to zero or infinity");
 	}
 
 	/* Check if inverse needs to be took */
@@ -147,9 +153,13 @@ Fraction pow_fractions(Fraction a, Fraction b)
 	}
 
 	/* Root a */
-	if(b.den != 1){
-        a.num = (FractionInt) pow((long_double) a.num, 1 / ((long_double) b.den));
-        a.den = (FractionInt) pow((long_double) a.den, 1 / ((long_double) b.den));
+	if (b.den != 1) {
+		a.num =
+		    (FractionInt) pow((long_double) a.num,
+				      1 / ((long_double) b.den));
+		a.den =
+		    (FractionInt) pow((long_double) a.den,
+				      1 / ((long_double) b.den));
 	}
 
 	/* Reduce, and inverse if necessary */
@@ -162,20 +172,46 @@ Fraction pow_fractions(Fraction a, Fraction b)
 	return a;
 }
 
-int compare_fractions(Fraction a, Fraction b){
+int compare_fractions(Fraction a, Fraction b)
+{
 	/* If whole numbers or infinities, just compare numerators */
-	if((a.den == 1 && b.den == 1) || (a.den==0 && b.den==0)){
-		return a.num>b.num?1:a.num<b.num?-1:0;
+	if ((a.den == 1 && b.den == 1) || (a.den == 0 && b.den == 0)) {
+		return a.num > b.num ? 1 : a.num < b.num ? -1 : 0;
 	}
 
 	/* Infinitite number vs finite number */
-	if(a.den == 0){
+	if (a.den == 0) {
 		return a.num > 0 ? 1 : -1;
 	}
-	if(b.den == 0){
+	if (b.den == 0) {
 		return b.num > 0 ? -1 : 1;
 	}
 
-	/* Everything else */
-	return a.num * b.den > b.num * a.den ? 1 : a.num * b.den < b.num * a.den ? -1 : 0;
+	/* Everything else - return 1 if a>b and -1 if b<a, else 0 */
+	return a.num * b.den > b.num * a.den ? 1 : a.num * b.den <
+	    b.num * a.den ? -1 : 0;
+}
+
+Fraction factorial_fraction(Fraction a)
+{
+	Fraction new_frac = construct_fraction(1, 1);
+	FractionInt n;
+
+	/* Reduce before checking errors */
+	reduce_fraction(&a);
+
+	/* Check for illegal moves */
+	if (a.den != 1) {
+		runtime_error("cannot calculate factorial of non-integer");
+	}
+	if (a.num < 0) {
+		runtime_error
+		    ("cannot calculate factorial of negative integer");
+	}
+
+	/* Take factorial */
+	for (n = 1; n <= a.num; n++) {
+		new_frac.num *= n;
+	}
+	return new_frac;
 }

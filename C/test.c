@@ -21,15 +21,16 @@ int main()
 	append_flink_to_chain(&a, b);
 
 	b.num = 11;
-	b.den = 1;
+	b.den = 2;
 
 	append_flink_to_chain(&a, b);
-    print_chain_numerically(a);
-    printf("\nCalculating standard deviation\n");
-	b = chain_stddev(a);
+	print_chain_numerically(a);
+	printf("\nCalculating standard deviation\n");
+	b = chain_stdev(a);
 
 
-	printf("%ji/%ji\n", b.num, b.den);
+	printf("stdev:%" FRACTION_INT_FORMATTER "/%" FRACTION_INT_FORMATTER
+	       "\n", b.num, b.den);
 
 	return 0;
 }
