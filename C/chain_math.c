@@ -9,9 +9,7 @@ Fraction chain_sum(Chain chain)
 	Link *it = chain.start;
 
 	/* Declare sum and initiate it to zero */
-	Fraction sum;
-	sum.num = 0;
-	sum.den = 1;
+	Fraction sum = construct_fraction(0, 1);
 
 	/* Compute sum */
 	while (it != NULL) {
@@ -29,9 +27,7 @@ Fraction chain_product(Chain chain)
 	Link *it = chain.start;
 
 	/* Declare product and initiate it to one */
-	Fraction product;
-	product.num = 1;
-	product.den = 1;
+	Fraction product = construct_fraction(1, 1);
 
 	/* Compute product */
 	while (it != NULL) {
@@ -39,19 +35,14 @@ Fraction chain_product(Chain chain)
 		it = it->next;
 	}
 
-	/* Return sum */
+	/* Return product */
 	return product;
 }
 
 Fraction chain_mean(Chain chain)
 {
-	/* Get length as fraction */
-	Fraction length;
-	length.num = chain.length;
-	length.den = 1;
-
 	/* Return sum divided by length */
-	return divide_fractions(chain_sum(chain), length);
+	return divide_fractions(chain_sum(chain), construct_fraction(chain.length, 1));
 }
 
 Fraction chain_max(Chain chain)
@@ -64,11 +55,18 @@ Fraction chain_max(Chain chain)
 		runtime_error("cannot find maximum of an empty chain");
 	}
 
+	/* Set iterator */
 	it = chain.start;
+
+	/* Initial maximum */
 	max = it->value;
 
+	/* Find max */
 	while (it->next != NULL) {
+		/* Forward iterator */
 		it = it->next;
+
+		/* Set max equal to new value if new value > old value */
 		max =
 		    compare_fractions(max,
 				      it->value) != -1 ? max : it->value;
@@ -143,5 +141,5 @@ Fraction chain_stdev(Chain chain)
 {
 	/* Return square root of variance */
 	return pow_fractions(chain_variance(chain),
-			     construct_fraction(2, 1));
+			     construct_fraction(1, 2));
 }

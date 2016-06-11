@@ -154,12 +154,10 @@ Fraction pow_fractions(Fraction a, Fraction b)
 
 	/* Root a */
 	if (b.den != 1) {
-		a.num =
-		    (FractionInt) pow((long_double) a.num,
-				      1 / ((long_double) b.den));
-		a.den =
-		    (FractionInt) pow((long_double) a.den,
-				      1 / ((long_double) b.den));
+		a.num = (FractionInt) pow((long_double) a.num,
+					  1 / ((long_double) b.den));
+		a.den = (FractionInt) pow((long_double) a.den,
+					  1 / ((long_double) b.den));
 	}
 
 	/* Reduce, and inverse if necessary */

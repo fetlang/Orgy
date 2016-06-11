@@ -6,16 +6,16 @@ import ast
 
 # After splitting into semi-meaningful words, the code is split into Token objects
 class Token:
-	def __init__(self, kin, lit, val, lin):
+	def __init__(self, kind, literal, value, line):
 		# Kind of token
-		self.kind = kin
+		self.kind = kind
 		assert self.kind in ["keyword", "fraction-literal", "chain-literal", "name"]
 		# The raw value
-		self.literal = lit
+		self.literal = literal
 		# What the value actually means
-		self.value = val
+		self.value = value
 		# Line number found on
-		self.line = lin
+		self.line = line
 
 
 class Tokenizer:

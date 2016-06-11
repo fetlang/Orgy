@@ -9,23 +9,23 @@
 		3) n/0 is treated as infinity, but 2/0 > 1/0
 		4) 0 should only exist in the form 0/1
 		5) 0^0 is not allowed
-		6) Modulus should involve integers only
+		6) Modulus and factorial should involve integers only
 		7) Only numerators can be negative
 */
 
-/* Exact rational math*/
+/* Exact rational math */
 /* Fraction math */
 Fraction add_fractions(Fraction a, Fraction b);
 Fraction subtract_fractions(Fraction a, Fraction b);
 Fraction multiply_fractions(Fraction a, Fraction b);
 Fraction divide_fractions(Fraction a, Fraction b);
-/* Integer math (error if non integer)*/
+/* Integer math (error if non integer) */
 Fraction modulus_fractions(Fraction a, Fraction b);
 Fraction factorial_fraction(Fraction a);
 
 /* Comparative math */
 int compare_fractions(Fraction a, Fraction b);
 
-/* Estimation math*/
+/* Estimation math */
 Fraction pow_fractions(Fraction a, Fraction b);
 #endif
