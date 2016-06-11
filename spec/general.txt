@@ -1,6 +1,4 @@
-Special vars:
-MISTRESS - stdout
-MASTER - stdin
+Constants:
 NAUGHTY - 0
 
 
