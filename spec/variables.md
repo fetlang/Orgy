@@ -25,7 +25,7 @@ To see types, see `types.md`
 Variables can be assigned one of four genders: male, female, neutral,
  and nonperson. Additionally, an N/A (not applicable) gender exists, but
  cannot be assigned to a variable by the programmer. No variable starts
- with a gender (that is, they start with ``None`), but once a gender is
+ with a gender (that is, they start with `None`), but once a gender is
 assigned, it cannot be changed.  
 
 Each gender is associated with a pair of pronouns:  

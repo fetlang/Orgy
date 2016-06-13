@@ -6,31 +6,10 @@ int main()
 {
 
 	Chain a;
-	Fraction b;
 	init_chain(&a);
-
-	b.num = 3;
-	b.den = 1;
-
-	append_flink_to_chain(&a, b);
-
-
-	b.num = 5;
-	b.den = 1;
-
-	append_flink_to_chain(&a, b);
-
-	b.num = 11;
-	b.den = 2;
-
-	append_flink_to_chain(&a, b);
-	print_chain_numerically(a);
-	printf("\nCalculating standard deviation\n");
-	b = chain_stdev(a);
-
-
-	printf("stdev:%" FRACTION_INT_FORMATTER "/%" FRACTION_INT_FORMATTER
-	       "\n", b.num, b.den);
+	append_cstr_to_chain(&a, "Hello World!\n");
+	chain_to_stream(a, stdout);
+	
 
 	return 0;
 }

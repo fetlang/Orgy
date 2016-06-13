@@ -42,7 +42,8 @@ Fraction chain_product(Chain chain)
 Fraction chain_mean(Chain chain)
 {
 	/* Return sum divided by length */
-	return divide_fractions(chain_sum(chain), construct_fraction(chain.length, 1));
+	return divide_fractions(chain_sum(chain),
+				construct_fraction(chain.length, 1));
 }
 
 Fraction chain_max(Chain chain)

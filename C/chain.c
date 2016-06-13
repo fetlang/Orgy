@@ -121,16 +121,33 @@ void append_chain_to_chain(Chain * chain1, Chain chain2)
 
 }
 
-void chain_to_stdout(Chain chain)
+void chain_to_stream(Chain chain, FILE * stream)
 {
+	/* Iterator */
 	Link *it = chain.start;
+
+	/* Char array */
+	ChainLengthInt array_pos = 0;
+	char *array = (char *) malloc(chain.length * sizeof(char));
+
+	/* Fill char array */
 	while (it != NULL) {
-		/* Display item as character */
-		putchar((char) (it->value.num / it->value.den));
+		/* Add item to array */
+		array[array_pos] = (char) (it->value.num / it->value.den);
 
 		/* Forward iterator */
 		it = it->next;
+		array_pos++;
+
+		/* Add null terminator */
+		array[array_pos] = '\0';
 	}
+
+	/* Print array to stream */
+	fprintf(stream, "%s", array);
+
+	/* Clean up */
+	free(array);
 }
 
 void print_chain_numerically(Chain chain)
