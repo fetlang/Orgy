@@ -1,16 +1,16 @@
 ## Operator Grammar
 #### Plain Grammar
-&lt;operator&gt; LHO
-&lt;operator&gt; LHO &lt;fraction literal&gt; times  
+&lt;operator&gt; LHO  
+&lt;operator&gt; LHO &lt;fraction literal&gt; times
 #### Make Grammar
-MAKE LHO &lt;operator&gt;
+MAKE LHO &lt;operator&gt;  
 MAKE LHO &lt;operator&gt; &lt;chain literal&gt;  
 MAKE LHO &lt;operator&gt; RHO  
 #### Have Grammer
 HAVE RHO &lt;operator&gt; LHO  
 
 ## Operators
-#### WHIP
+#### SPANK
 Grammar: have, plain
 Default: 1/1
 
@@ -30,7 +30,7 @@ Grammar: have, plain
 Default: 1/1
 
     Divide(Fraction& LHO, Fraction RHO)  
-#### PENETRATE
+#### SUCK
 Grammar: have, plain
 Default: 1/1
 

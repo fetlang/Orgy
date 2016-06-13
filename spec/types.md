@@ -5,7 +5,7 @@ denominator.
 ## Chains
 Chains are lists of fractions. They can be used as strings, or just an
 array of numbers. When printed as a string, each fraction is converted
-into an C char type.
+into an ASCII code.
 
 ## Streams
 Streams are treated like chains in Orgy, but have limitations. The three

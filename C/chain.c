@@ -121,7 +121,7 @@ void append_chain_to_chain(Chain * chain1, Chain chain2)
 
 }
 
-void print_chain(Chain chain)
+void chain_to_stdout(Chain chain)
 {
 	Link *it = chain.start;
 	while (it != NULL) {
