@@ -19,6 +19,9 @@ The type of a variable is implied by the first operation it is in. If it
 is in a situation in which it could either be a fraction or chain, it
 will default to chain.  
 
+Chain type variables are initiated to `""`, while fraction type variables
+are initiated to `zero`
+
 To see types, see `types.md`
 
 ## Gender
@@ -29,10 +32,10 @@ Variables can be assigned one of four genders: male, female, neutral,
 assigned, it cannot be changed.  
 
 Each gender is associated with a pair of pronouns:  
-Male - `HIM`/`HIMSELF`/`HIS`  
-Female - `HER`/`HERSELF`/`HER`  
-Neutral - `THEY`/`THEMSELF`/`THEIR`  
-Nonperson - `IT`/`ITSELF`/`ITS`
+Male - `HIM`/`HIMSELF`/`HIS`/`HIS OWN`  
+Female - `HER`/`HERSELF`/`HER`/`HER OWN`  
+Neutral - `THEY`/`THEMSELF`/`THEIR`/`THEIR OWN`  
+Nonperson - `IT`/`ITSELF`/`ITS`/`ITS OWN`
 
 Male, female, and neutral are reserved for human-ly named variables,
 like `Sasha Grey`  
@@ -63,3 +66,6 @@ Multiply `Ada Lovelace`(female) by `Linus Torvalds`(no gender):
 Add `Guido Van Rossum`(male) to `Guido Van Rossum`
 
     Have Guido Van Rossum lick his own cock
+
+You see, a pronoun was made to take the place of a noun, 'cause saying
+all those nouns over and over can really wear you down! 
