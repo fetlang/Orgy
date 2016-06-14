@@ -14,6 +14,8 @@
 */
 
 /* Exact rational math */
+/* Reduction */
+void reduce_fraction(Fraction * a);
 /* Fraction math */
 Fraction add_fractions(Fraction a, Fraction b);
 Fraction subtract_fractions(Fraction a, Fraction b);

@@ -71,4 +71,3 @@ Default: None
 
     Concat(Chain& LHO, Chain RHO)
     Concat(Chain& LHO, Fraction RHO) 
-

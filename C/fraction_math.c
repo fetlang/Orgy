@@ -15,7 +15,7 @@
 
 
 
-static void reduce_fraction(Fraction * a)
+void reduce_fraction(Fraction * a)
 {
 	FractionInt max;
 	FractionInt c;
@@ -131,7 +131,7 @@ Fraction pow_fractions(Fraction a, Fraction b)
 		    ("cannot exponentiate zero or infinity to zero or infinity");
 	}
 
-	/* Check if inverse needs to be took */
+	/* Check if inverse needs to be took */ 
 	if (b.num < 0) {
 		reverse = 1;
 		b.num = -b.num;

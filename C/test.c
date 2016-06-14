@@ -4,12 +4,14 @@
 #include <stdio.h>
 int main()
 {
-
 	Chain a;
 	init_chain(&a);
-	append_cstr_to_chain(&a, "Hello World!\n");
+	append_fraction_to_chain(&a, construct_fraction(-100, 100));
 	chain_to_stream(a, stdout);
-	
+
+
+
+
 
 	return 0;
 }
