@@ -147,7 +147,7 @@ Fraction pow_fractions(Fraction a, Fraction b)
 	}
 
 	/* Check if a's num can't be rooted by b's denominator */
-	if (a.num < 0 && b.den % 2 == 0) {
+	if ((a.num < 0) && (b.den % 2 == 0)) {
 		runtime_error
 		    ("cannot take even-number root of a negative number");
 	}
