@@ -141,17 +141,17 @@ void append_stream_to_chain(Chain * chain, FILE * stream)
 static void num_to_cstr(char *str, FractionInt num)
 {
 	/* List numeric literals */
-	char *zero_to_nineteen[] = {
+	const char *zero_to_nineteen[] = {
 		"zero", "one", "two", "three", "four", "five", "six",
 		"seven", "eight", "nine", "ten", "eleven",
 		"twelve", "thirteen", "fourteen", "fifteen", "sixteen",
 		"seventeen", "eighteen", "nineteen"
 	};
-	char *twenty_to_ninety[] =
+	const char *twenty_to_ninety[] =
 	    { "twenty", "thirty", "forty", "fifty", "sixty", "seventy",
 		"eighty", "ninety"
 	};
-	char *big_numbers[] =
+	const char *big_numbers[] =
 	    { "thousand", "million", "billion", "quadrillion",
   "quintillion" };
 
