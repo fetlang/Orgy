@@ -39,6 +39,6 @@ void append_stream_to_chain(Chain * chain, FILE * stream);
 /* Print each fraction to stream as char */
 void chain_to_stream(Chain chain, FILE * stream);
 
-/* Traverse chain and print each value as fraction */
-void print_chain_numerically(Chain chain);
+/* Parse chain to construct fraction */
+Fraction chain_to_fraction(Chain chain);
 #endif

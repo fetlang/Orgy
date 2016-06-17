@@ -113,8 +113,9 @@ void chain_to_stream(Chain chain, FILE * stream)
 	/* Print out chain */
 	while (it != NULL) {
 		/* Print character */
-		fprintf(stream, "%c",(char) (it->value.num / it->value.den));
-		
+		fprintf(stream, "%c",
+			(char) (it->value.num / it->value.den));
+
 		/* Forward iterator */
 		it = it->next;
 	}
@@ -153,7 +154,8 @@ static void num_to_cstr(char *str, FractionInt num)
 	};
 	const char *big_numbers[] =
 	    { "thousand", "million", "billion", "quadrillion",
-  "quintillion" };
+		"quintillion"
+	};
 
 	/* Check for less-than-zero error */
 	if (num < 0) {
@@ -263,7 +265,7 @@ void append_fraction_to_chain(Chain * chain, Fraction fraction)
 {
 	/* Reduce fraction */
 	reduce_fraction(&fraction);
-	
+
 	/* Append "negative" if necessary */
 	if (fraction.num < 0) {
 		append_cstr_to_chain(chain, "negative ");
@@ -276,38 +278,81 @@ void append_fraction_to_chain(Chain * chain, Fraction fraction)
 	}
 	/* Check if infinity */
 	if (fraction.den == 0) {
-		append_cstr_to_chain(chain, "infinity");
+		append_cstr_to_chain(chain, "a lot");
 		return;
 	}
 
 
 	/* Write numerator to chain */
 	append_fraction_int_to_chain(chain, fraction.num);
-	
+
 	/* Write denominator to chain */
-	if(fraction.den != 1){
+	if (fraction.den != 1) {
 		append_cstr_to_chain(chain, " over ");
 		append_fraction_int_to_chain(chain, fraction.den);
 	}
 }
 
+Fraction chain_to_fraction(Chain chain){
+	/* Define starting fraction */
+	Fraction frac = construct_fraction(0, 0);
+	
+	char value;
+	Link * it = chain.start;
+	
+	int place = 0;
+	
+	/* Parse chain */
+	while(it != NULL){
+		/* convert value to character */
+		value = (char)(it->value.num / it->value.den);
+		
+		/* parse digit */
+		if (value >= '0' && value <='9'){
+			if(!place){
+				/* Add to numerator */
+				frac.num *= 10;
+				frac.num += value - '0';
+			}else{
+				/* Add integer */
+				frac.den *= 10;
+				frac.den += value - '0';
+			}
+		}else if (value == '/' && place == 0){
+			place = 1;
+		}else{
+			/* Break if coming across an unexpected character */
+			break;
+		}
+		it = it->next;
+	}
+	
+	/* Construct, reduce, return */
+	if(place==0){
+		frac.den = 1;
+	}
+	reduce_fraction(&frac);
+	return frac;
+}
 
+/*
 void print_chain_numerically(Chain chain)
 {
 	Link *it = chain.start;
 	printf("(");
 	while (it != NULL) {
-		/* Display item numerator as integer */
+		// Display item numerator as integer
 		printf("%s%" FRACTION_INT_FORMATTER,
 		       it != chain.start ? ", " : "", it->value.num);
 
-		/* Display denominator if not 1 */
+		// Display denominator if not 1
 		if (it->value.den != 1) {
 			printf("/%" FRACTION_INT_FORMATTER, it->value.den);
 		}
 
-		/* Forward iterator */
+		// Forward iterator
 		it = it->next;
 	}
 	printf(")");
 }
+*/

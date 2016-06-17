@@ -13,12 +13,13 @@
 #endif
 
 
-
+#include <stdio.h>
 
 void reduce_fraction(Fraction * a)
 {
+	printf("!\n");
 	FractionInt max;
-	FractionInt c;
+	FractionInt i;
 
 
 	/* Check for negative error */
@@ -41,20 +42,22 @@ void reduce_fraction(Fraction * a)
 		return;
 	}
 
-	/* Get maximum */
-	max = sqrt(abs(a->num) < a->den ? a->num : a->den) + 1;
-
 	/* Reduce by 2 */
-	while (a->num % 2 == 0 && a->den % 2 == 0) {
+	while ((a->num % 2 == 0) && (a->den % 2 == 0)) {
 		a->num /= 2;
 		a->den /= 2;
 	}
 
+	/* Get maximum */
+	max = (abs(a->num) < a->den ? a->num : a->den)/2 + 1;
+
 	/* Reduce by odd numbers */
-	for (c = 3; c < max; c += 2) {
-		while (((a->num % c) == 0) && ((a->den % c) == 0)) {
-			a->num /= c;
-			a->den /= c;
+	if(max < 10000000){
+		for (i = 3; i < max; i += 2) {
+			while (((a->num % i) == 0) && ((a->den % i) == 0)) {
+				a->num /= i;
+				a->den /= i;
+			}
 		}
 	}
 
@@ -131,7 +134,7 @@ Fraction pow_fractions(Fraction a, Fraction b)
 		    ("cannot exponentiate zero or infinity to zero or infinity");
 	}
 
-	/* Check if inverse needs to be took */ 
+	/* Check if inverse needs to be took */
 	if (b.num < 0) {
 		reverse = 1;
 		b.num = -b.num;
