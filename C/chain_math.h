@@ -1,7 +1,7 @@
 #ifndef ORGY_CHAIN_MATH_H_
-#    define ORGY_CHAIN_MATH_H_
-#    include "fraction.h"
-#    include "chain.h"
+#define ORGY_CHAIN_MATH_H_
+#include "fraction.h"
+#include "chain.h"
 
 /* Sum up chain and return as fraction, empty sum is zero */
 Fraction chain_sum(Chain chain);

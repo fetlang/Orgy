@@ -2,10 +2,12 @@
 
 Orgy Support:
 	C99 and higher
-	C++98 and higher
+	C++11 and higher
 */
 #ifndef __cplusplus
 #if __STDC_VERSION__ < 199901L
-#error Language not supported. Please use C99 or higher, or C++98 or higher
+#error C version not supported. Please use a C99 compiler (pref. GCC)
 #endif
+#elif __cplusplus <= 199711L
+#error C++ version not supported. Please use a C++11 compiler (pref. GCC)
 #endif

@@ -1,6 +1,6 @@
 #ifndef ORGY_FRACTION_H_
-#    define ORGY_FRACTION_H_
-#    include "typedefs.h"
+#define ORGY_FRACTION_H_
+#include "typedefs.h"
 
 /* Fraction structure for Orgy */
 typedef struct OrgyFractionStructure {

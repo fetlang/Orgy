@@ -154,7 +154,7 @@ static void num_to_cstr(char *str, FractionInt num)
 	};
 	const char *big_numbers[] =
 	    { "thousand", "million", "billion", "quadrillion",
-		"quintillion"
+		"quintillion", "sextillion"
 	};
 
 	/* Check for less-than-zero error */
@@ -175,6 +175,7 @@ static void num_to_cstr(char *str, FractionInt num)
 		strcpy(str, big_numbers[(FractionInt) log10(num) / 3 - 1]);
 		/* Anything else returns an error */
 	} else {
+		fprintf(stderr, "(%ji)", num);
 		runtime_error
 		    ("num not valid for num_to_cstr(this shouldn't happen)");
 	}
@@ -230,6 +231,7 @@ static void append_fraction_int_to_chain(Chain * chain, FractionInt num)
 	char temp[50];
 
 	/* Find magnitude */
+	/* Magnitude overflows when num is 10^18 */
 	for (magnitude = 1; (num / magnitude) != 0; magnitude *= 1000);
 
 	/* Write to chain */
@@ -293,44 +295,65 @@ void append_fraction_to_chain(Chain * chain, Fraction fraction)
 	}
 }
 
-Fraction chain_to_fraction(Chain chain){
+Fraction chain_to_fraction(Chain chain)
+{
 	/* Define starting fraction */
 	Fraction frac = construct_fraction(0, 0);
-	
+
 	char value;
-	Link * it = chain.start;
-	
+	Link *it = chain.start;
+
 	int place = 0;
-	
-	/* Parse chain */
-	while(it != NULL){
-		/* convert value to character */
-		value = (char)(it->value.num / it->value.den);
-		
-		/* parse digit */
-		if (value >= '0' && value <='9'){
-			if(!place){
-				/* Add to numerator */
-				frac.num *= 10;
-				frac.num += value - '0';
-			}else{
-				/* Add integer */
-				frac.den *= 10;
-				frac.den += value - '0';
-			}
-		}else if (value == '/' && place == 0){
-			place = 1;
-		}else{
-			/* Break if coming across an unexpected character */
-			break;
+	int negative = 0;
+
+	/* Check for negatives */
+	if (it != NULL) {
+		if ('-' == (char) (it->value.num / it->value.den)) {
+			negative = 1;
+			it = it->next;
 		}
-		it = it->next;
+
+		/* Parse chain */
+		while (it != NULL) {
+			/* convert value to character */
+			value = (char) (it->value.num / it->value.den);
+
+			/* parse digit */
+			if (value >= '0' && value <= '9') {
+				if (!place) {
+					/* Add to numerator */
+					frac.num *= 10;
+					frac.num += value - '0';
+				} else {
+					/* Add integer */
+					frac.den *= 10;
+					frac.den += value - '0';
+				}
+			} else if (value == '/' && place == 0) {
+				place = 1;
+			} else {
+				/* Break if coming across an unexpected character */
+				break;
+			}
+			/* Forward iterator */
+			it = it->next;
+		}
 	}
-	
-	/* Construct, reduce, return */
-	if(place==0){
+
+	/* Construct, */
+	if (place == 0) {
 		frac.den = 1;
 	}
+	if (negative) {
+		frac.num = -frac.num;
+	}
+
+	/* 0/0 is 1 in this case */
+	if (frac.num == 0 && frac.den == 0) {
+		frac.num = frac.den = 1;
+	}
+
+	/* Reduce and return */
 	reduce_fraction(&frac);
 	return frac;
 }

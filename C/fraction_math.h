@@ -1,7 +1,7 @@
 #ifndef ORGY_FRACTION_MATH_H_
-#    define ORGY_FRACTION_MATH_H_
+#define ORGY_FRACTION_MATH_H_
 
-#    include "fraction.h"
+#include "fraction.h"
 /*
 	Fraction math rules:
 		1) 0/0 is not allowed

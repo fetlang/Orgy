@@ -4,12 +4,12 @@
 #include "error.h"
 #define POW_ACCURACY 256
 #if __STDC_VERSION__ >= 199901L
-#    define abs llabs
-#    define pow powl
-#    define long_double long double
+#define abs llabs
+#define pow powl
+#define long_double long double
 #else
-#    define abs labs
-#    define long_double double
+#define abs labs
+#define long_double double
 #endif
 
 
@@ -17,7 +17,6 @@
 
 void reduce_fraction(Fraction * a)
 {
-	printf("!\n");
 	FractionInt max;
 	FractionInt i;
 
@@ -49,10 +48,10 @@ void reduce_fraction(Fraction * a)
 	}
 
 	/* Get maximum */
-	max = (abs(a->num) < a->den ? a->num : a->den)/2 + 1;
+	max = (abs(a->num) < a->den ? a->num : a->den) / 2 + 1;
 
 	/* Reduce by odd numbers */
-	if(max < 10000000){
+	if (max < 10000000) {
 		for (i = 3; i < max; i += 2) {
 			while (((a->num % i) == 0) && ((a->den % i) == 0)) {
 				a->num /= i;

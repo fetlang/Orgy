@@ -7,4 +7,3 @@ Fraction construct_fraction(FractionInt num, FractionInt den)
 	frac.den = den;
 	return frac;
 }
-

@@ -1,7 +1,7 @@
 #ifndef ORGY_CHAIN_H_
-#    define ORGY_CHAIN_H_
-#    include "fraction.h"
-#    include <stdio.h>
+#define ORGY_CHAIN_H_
+#include "fraction.h"
+#include <stdio.h>
 
 /* Chains (strings) are represented as linked lists */
 typedef struct Link {
