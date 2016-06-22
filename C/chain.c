@@ -358,6 +358,26 @@ Fraction chain_to_fraction(Chain chain)
 	return frac;
 }
 
+int compare_chains(Chain a, Chain b)
+{
+	Link *a_iterator = a.start;
+	Link *b_iterator = b.start;
+
+	while (a_iterator != NULL && b_iterator != NULL) {
+		if (a_iterator->value != b_iterator->value) {
+			return 1;
+		}
+		a_iterator = a_iterator->next;
+		b_iterator = b_iterator->next;
+	}
+
+	if ((a_iterator == NULL || b_iterator == NULL) && a != b) {
+		return 1;
+	}
+
+	return 0;
+}
+
 /*
 void print_chain_numerically(Chain chain)
 {

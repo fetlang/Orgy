@@ -25,7 +25,11 @@ Fraction divide_fractions(Fraction a, Fraction b);
 Fraction modulus_fractions(Fraction a, Fraction b);
 Fraction factorial_fraction(Fraction a);
 
-/* Comparative math */
+/* Comparative math
+   1 : a>b
+   0 : a==b
+   -1 : a<b
+*/
 int compare_fractions(Fraction a, Fraction b);
 
 /* Estimation math */

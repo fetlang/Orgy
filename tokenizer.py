@@ -2,17 +2,18 @@ import shlex
 import error
 import numparse
 import ast
+import keywords
 
 
 # After splitting into semi-meaningful words, the code is split into Token objects
 class Token:
-	def __init__(self, kind, literal, value, line):
+	def __init__(self, kind, raw_value, value, line):
 		# Kind of token
 		self.kind = kind
-		assert self.kind in ["keyword", "fraction-literal", "chain-literal", "name"]
+		assert self.kind in ["keyword", "fraction-literal", "chain-literal", "identifier"]
 		# The raw value
-		self.literal = literal
-		# What the value actually means
+		self.raw_value = raw_value
+		# What the raw_value actually means
 		self.value = value
 		# Line number found on
 		self.line = line
@@ -21,14 +22,6 @@ class Token:
 class Tokenizer:
 	# Take in raw source code
 	def __init__(self, sourcecode):
-		# Proper key word
-		self.key_words = ["whip", "worship", "have", "her", "herself", "him", "himself", "them", "themself", "it",
-						"itself", "when", "if", "is"]
-		# Proper key words involving more than one word
-		self.compound_words = ["is over", "is under", "more please", "tie up", "end if", "feel up", "is not"]
-		# All reserved words
-		self.reserved_words = list(set(self.key_words + " ".join(self.compound_words).split()))
-		print(self.reserved_words)
 		
 		# List of tokens (permanent) and words(temporary)
 		self.tokens = []
@@ -96,17 +89,24 @@ class Tokenizer:
 			while i < len(line):
 				word = line[i]
 
-				# Convert reserved word to token
-				if word.lower() in self.reserved_words:
-					if i + 1 < len(line) and " ".join(line[i:i + 2]).lower() in self.compound_words:
-						word = " ".join(line[i:i + 2])
+				# Convert keyword to token
+				if word.lower() in keywords.base_words:
+					j = 0
+					# Look for full keyword
+					while (i + 1 < len(line)) and " ".join([word,line[i+1]]).lower() in keywords.keywords:
+						word = " ".join([word,line[i+1]])
 						i += 1
-					elif word.lower() not in self.key_words:
-						raise error.OrgyTokenizerError("expected another word after {}".format(word), line_number)
-					self.tokens.append(Token("keyword", word, word.lower(), line_number))
+						j += 1
+					# False alarm - not actually a keyword
+					if word.lower() not in keywords.keywords:
+						i -= j
+					# Add as token
+					else:
+						self.tokens.append(Token("keyword", word, word.lower(), line_number))
+						continue
 
 				# Convert number to token
-				elif numparse.within_number(word):
+				if numparse.within_number(word):
 					number_start = i
 					# Check if next (and the next) word is part of the number
 					while i < len(line) - 1 and numparse.within_number(line[i + 1]):
@@ -141,7 +141,7 @@ class Tokenizer:
 						and not numparse.within_number(line[i + 1]):
 						i += 1
 					name = " ".join(line[name_start:i + 1])
-					self.tokens.append(Token("name", name, name[0:name.index("'") if "'" in name else len(name)].lower(), line_number))
+					self.tokens.append(Token("identifier", name, name[0:name.index("'") if "'" in name else len(name)].lower(), line_number))
 				i += 1
 
 
