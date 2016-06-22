@@ -11,37 +11,37 @@ HAVE RHO &lt;operator&gt; LHO
 
 ## Operators
 #### SPANK
-Grammar: have, plain
+Grammar: have, plain  
 Default: 1/1
 
     Subtract(Fraction& LHO, Fraction RHO)  
 #### LICK
-Grammar: have, plain
+Grammar: have, plain  
 Default: 1/1
 
     Add(Fraction& LHO, Fraction RHO)
 #### WORSHIP
-Grammar: have, plain
+Grammar: have, plain  
 Default: 1/1
 
     Multiply(Fraction& LHO, Fraction RHO)
 #### HUMILIATE
-Grammar: have, plain
+Grammar: have, plain  
 Default: 1/1
 
     Divide(Fraction& LHO, Fraction RHO)  
 #### SUCK
-Grammar: have, plain
+Grammar: have, plain  
 Default: 1/1
 
     Modulus(Fraction& LHO, Fraction RHO)  
 #### TICKLE
-Grammar: have, plain
+Grammar: have, plain  
 Default: 1/1
 
     Exponent(Fraction& LHO, Fraction RHO)  
 #### MOAN/BEG
-Grammar: make
+Grammar: make  
 Default: ""
 
     /* Assign value of RHO to LHO */
@@ -56,7 +56,7 @@ Default: ""
     
 
 #### SCREAM/PLEAD
-Grammar: make
+Grammar: make  
 Default: ""
 
     /* Assign value of RHO to LHO */
@@ -66,7 +66,7 @@ Default: ""
     Assign_plus_newline(Chain& LHO, Fraction RHO)
 
 #### TIE UP
-Grammar: have
+Grammar: have  
 Default: None
 
     Concat(Chain& LHO, Chain RHO)
