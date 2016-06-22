@@ -11,10 +11,7 @@ example:
 
 ## Permissions
 Variables have two permissions: reading and writing
-<<<<<<< HEAD
 
-=======
->>>>>>> f780df3d4b88c17a5a47700890b9c6077db1a71c
 The programmer cannot restrict these, but some builtin variables might
 be restricted, like mathematical constants or STDIN/STDOUT/STDERR
 
