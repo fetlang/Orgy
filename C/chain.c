@@ -367,17 +367,18 @@ int compare_chains(Chain a, Chain b)
 	while (a_iterator != NULL && b_iterator != NULL) {
 		/* Compare the numerator and denominator */
 		if (a_iterator->value.num != b_iterator->value.num
-			|| a_iterator->value.den != b_iterator->value.den) 			{
+		    || a_iterator->value.den != b_iterator->value.den) {
 			return 1;
 		}
-		
+
 		/* Foward iterators */
 		a_iterator = a_iterator->next;
 		b_iterator = b_iterator->next;
 	}
 
 	/* Check if one XOR the other is NULL */
-	if ((a_iterator == NULL || b_iterator == NULL) && a_iterator != b_iterator) {
+	if ((a_iterator == NULL || b_iterator == NULL)
+	    && a_iterator != b_iterator) {
 		return 1;
 	}
 
