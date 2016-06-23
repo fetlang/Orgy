@@ -40,7 +40,7 @@ void append_stream_to_chain(Chain * chain, FILE * stream);
 void chain_to_stream(Chain chain, FILE * stream);
 
 /* Compare chain: 0 if they are the same, 1 if not */
-void compare_chains(Chain a, Chain b);
+int compare_chains(Chain a, Chain b);
 
 /* Parse chain to construct fraction */
 Fraction chain_to_fraction(Chain chain);

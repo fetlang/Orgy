@@ -363,15 +363,21 @@ int compare_chains(Chain a, Chain b)
 	Link *a_iterator = a.start;
 	Link *b_iterator = b.start;
 
+	/* Compare until at least one node is NULL */
 	while (a_iterator != NULL && b_iterator != NULL) {
-		if (a_iterator->value != b_iterator->value) {
+		/* Compare the numerator and denominator */
+		if (a_iterator->value.num != b_iterator->value.num
+			|| a_iterator->value.den != b_iterator->value.den) 			{
 			return 1;
 		}
+		
+		/* Foward iterators */
 		a_iterator = a_iterator->next;
 		b_iterator = b_iterator->next;
 	}
 
-	if ((a_iterator == NULL || b_iterator == NULL) && a != b) {
+	/* Check if one XOR the other is NULL */
+	if ((a_iterator == NULL || b_iterator == NULL) && a_iterator != b_iterator) {
 		return 1;
 	}
 
