@@ -19,7 +19,7 @@ class Operator:
 operators = [
 	Operator("spank", "subtract",
 			 grammar=["have", "plain"],
-		     default=Fraction(1,1),
+			 default=Fraction(1,1),
 			 code={"fraction/fraction":"LHO=subtract_fractions(LHO,RHO)"}),
 	Operator("lick", "add",
 			 grammar=["have", "plain"],
@@ -39,8 +39,8 @@ operators = [
 			 grammar=["make"],
 			 default="",
 			 code={
-				   "chain/fraction": 'clear_chain(&LHO);append_fraction_to_chain(&LHO,RHO);append_cstr_to_chain("\\n")',
-				   "chain/chain": 'clear_chain(&LHO);append_chain_to_chain(&LHO, RHO);append_cstr_to_chain("\\n")'
+				   "chain/fraction": 'clear_chain(&LHO);append_fraction_to_chain(&LHO,RHO);append_cstr_to_chain(&LHO,"\\n")',
+				   "chain/chain": 'clear_chain(&LHO);append_chain_to_chain(&LHO, RHO);append_cstr_to_chain(&LHO,"\\n")'
 				   }),
 	Operator("tie up", "concat",
 			 grammar=["have"],
@@ -54,35 +54,35 @@ operators = [
 
 # Comparison operators
 comparison_operators = [
-    Operator("is", "==",
-             code={
-                 "fraction/fraction": "(compare_fractions(LHO, RHO)==0)",
-                 "chain/chain": "(compare_chains(LHO, RHO)==0)"
-             }),
-    Operator("is not", "!=",
-             alt="isn't",
-             code={
-                "fraction/fraction": "(compare_fractions(LHO, RHO)!=0)",
-                 "chain/chain": "(compare_chains(LHO, RHO)!=0)"
-             }),
-    Operator("is over", ">",
-             alt="isn't",
-             code={
-                 "fraction/fraction": "(compare_fractions(LHO, RHO)==1)",
-             }),
-    Operator("is under", "<",
-             alt="isn't",
-             code={
-                 "fraction/fraction": "(compare_fractions(LHO, RHO)==-1)",
-             }),
-    Operator("is dominant towards", ">=",
-             alt="isn't",
-             code={
-                 "fraction/fraction": "(compare_fractions(LHO, RHO)>=0)",
-             }),
-    Operator("is submissive towards", "<=",
-             alt="isn't",
-             code={
-                 "fraction/fraction": "(compare_fractions(LHO, RHO)<=0)",
-             })
+	Operator("is", "==",
+			 code={
+				 "fraction/fraction": "(compare_fractions(LHO, RHO)==0)",
+				 "chain/chain": "(compare_chains(LHO, RHO)==0)"
+			 }),
+	Operator("is not", "!=",
+			 alt="isn't",
+			 code={
+				"fraction/fraction": "(compare_fractions(LHO, RHO)!=0)",
+				 "chain/chain": "(compare_chains(LHO, RHO)!=0)"
+			 }),
+	Operator("is over", ">",
+			 alt="isn't",
+			 code={
+				 "fraction/fraction": "(compare_fractions(LHO, RHO)==1)",
+			 }),
+	Operator("is under", "<",
+			 alt="isn't",
+			 code={
+				 "fraction/fraction": "(compare_fractions(LHO, RHO)==-1)",
+			 }),
+	Operator("is dominant towards", ">=",
+			 alt="isn't",
+			 code={
+				 "fraction/fraction": "(compare_fractions(LHO, RHO)>=0)",
+			 }),
+	Operator("is submissive towards", "<=",
+			 alt="isn't",
+			 code={
+				 "fraction/fraction": "(compare_fractions(LHO, RHO)<=0)",
+			 })
 ]

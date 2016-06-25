@@ -137,6 +137,15 @@ class Tokenizer:
 				# Convert names to token
 				else:
 					name_start = i
+					# Continue until start of literal is found
+					while i < len(line) -1 and line[i + 1][0] != '"' and not numparse.within_number(line[i+1]):
+						# Check if there is a beginning of a keyword
+						if line[i + 1] in keywords.base_words:
+							# Oh shit, there is, What we gonna do?
+							k = i + 1
+							while line[k] in keywords.base_words:
+				else:
+					name_start = i
 					while i < len(line) - 1 and line[i + 1].lower() not in self.reserved_words and line[i + 1][0] != '"'\
 						and not numparse.within_number(line[i + 1]):
 						i += 1
