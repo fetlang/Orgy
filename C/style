@@ -1,0 +1,2 @@
+#!/bin/sh
+indent -kr -i8 *.c *.h
