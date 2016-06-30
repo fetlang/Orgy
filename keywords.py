@@ -10,17 +10,21 @@ dictionary = {
 }
 
 # Add list of operators (primary and secondary names) to dictionary
-dictionary += {"operators": [a.name for a in operators.operators]+[a.alt for a in filter(
-	lambda b: b is not None, operators.operators)]}
+dictionary.update({"operators": [a.name for a in operators.operators]+[a.alt for a in filter(
+	lambda b: b is not None, operators.operators)]})
 
 # Add list of comparison operator (primary and secondary names) to dictionary
-dictionary += {"comparison operators": [a.name for a in operators.comparison_operators]+[a.alt for a in filter(
-	lambda b: b is not None, operators.comparison_operators)]}
+dictionary.update({"comparison operators": [a.name for a in operators.comparison_operators]+[a.alt for a in filter(
+	lambda b: b is not None, operators.comparison_operators)]})
 
+print(dictionary)
 # The list version of the dictionary: keywords
 keywords = []
 for a in [b for b in dictionary.values()]:
-	keywords += a
+	for c in a:
+		if c is not None:
+			keywords.append(c)
 
 # Every actual word that could be part of a meaning
 base_words = (" ".join(keywords)).split()
+print(base_words)

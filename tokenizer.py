@@ -10,7 +10,7 @@ class Token:
 	def __init__(self, kind, raw_value, value, line):
 		# Kind of token
 		self.kind = kind
-		assert self.kind in ["keyword", "fraction-literal", "chain-literal", "identifier"]
+		assert self.kind in ["keyword", "fraction-literal", "chain-literal", "identifier", "pronoun"]
 		# The raw value
 		self.raw_value = raw_value
 		# What the raw_value actually means
@@ -35,7 +35,7 @@ class Tokenizer:
 
 		# Print out
 		for i in self.tokens:
-			print("({},{},{},{})".format(i.kind, i.literal, i.value, i.line))
+			print("({},{},{},{})".format(i.kind, i.raw_value, i.value, i.line))
 
 	# Split self.raw_text into lines, and lines into semi-meaningful words
 	# That is, words separated by spaces, and quotes
@@ -82,6 +82,7 @@ class Tokenizer:
 
 		# Go through lines
 		for line in self.words:
+			#print(line)
 			line_number += 1
 
 			# Go through line
@@ -89,8 +90,10 @@ class Tokenizer:
 			while i < len(line):
 				word = line[i]
 
+
 				# Convert keyword to token
 				if word.lower() in keywords.base_words:
+					print("Probable:{}".format(word))
 					j = 0
 					# Look for full keyword
 					while (i + 1 < len(line)) and " ".join([word,line[i+1]]).lower() in keywords.keywords:
@@ -99,10 +102,13 @@ class Tokenizer:
 						j += 1
 					# False alarm - not actually a keyword
 					if word.lower() not in keywords.keywords:
+						print("Not lol:{}".format(word))
 						i -= j
 					# Add as token
 					else:
+						print("Confirm:{}".format(word))
 						self.tokens.append(Token("keyword", word, word.lower(), line_number))
+						i += 1
 						continue
 
 				# Convert number to token
@@ -134,21 +140,32 @@ class Tokenizer:
 					# Define token as chain literal
 					self.tokens.append(Token("chain-literal", buffer, quote, line_number))
 
-				# Convert names to token
+				# Check for non-posessive pronoun
+				elif word.lower() in keywords.dictionary["objective pronouns"] or word.lower() in keywords.dictionary["reflexive pronouns"]:
+					self.tokens.append(Token("pronoun", word, word.lower(), line_number))
+
+				# Convert names or possesive pronouns to token
 				else:
 					name_start = i
 					# Continue until start of literal is found
 					while i < len(line) -1 and line[i + 1][0] != '"' and not numparse.within_number(line[i+1]):
 						# Check if there is a beginning of a keyword
-						if line[i + 1] in keywords.base_words:
+						if line[i + 1].lower() in keywords.base_words:
 							# Oh shit, there is, What we gonna do?
+							buf = ""
 							k = i + 1
-							while line[k] in keywords.base_words:
-				else:
-					name_start = i
-					while i < len(line) - 1 and line[i + 1].lower() not in self.reserved_words and line[i + 1][0] != '"'\
-						and not numparse.within_number(line[i + 1]):
+							it_is_a_keyword = False
+							while k<len(line) and line[k].lower() in keywords.base_words:
+								buf += line[k]+" "
+								# Check if the buffer matches a keyword
+								if buf[0:-1].lower() in keywords.keywords:
+									# oh shiiiiiiiiit whadup it's a keyword
+									it_is_a_keyword = True
+									break
+							if it_is_a_keyword:
+								break
 						i += 1
+					# Final identifier name
 					name = " ".join(line[name_start:i + 1])
 					self.tokens.append(Token("identifier", name, name[0:name.index("'") if "'" in name else len(name)].lower(), line_number))
 				i += 1
@@ -158,6 +175,6 @@ class Tokenizer:
 if __name__ == "__main__":
 	Tokenizer("""UNGAG
 	MORE PLEASE
-	WHIP RICHARD STALLMAN NINE HUNDRED TIMES
-	HAVE LINUS TORVALDS WORSHIP RICHARD STALLMAN'S FEET "what is going on \\" here?"
+	SPANK RICHARD STALLMAN NINE HUNDRED TIMES
+	HAVE LINUS TORVALDS WORSHIP HIM now "what is going on \\" here?"
 	""")
