@@ -1,5 +1,6 @@
-import tokenizer
+import lexer
 import keywords
+
 
 # Syntax tree node
 class Node:

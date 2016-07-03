@@ -8,5 +8,5 @@ class OrgyNumberError(OrgyError):
 	pass
 
 
-class OrgyTokenizerError(OrgyError):
+class OrgyLexerError(OrgyError):
 	pass

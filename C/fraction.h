@@ -10,4 +10,11 @@ typedef struct OrgyFractionStructure {
 
 /* Fake constructor for Fraction */
 Fraction construct_fraction(FractionInt num, FractionInt den);
+
+/* Get Random Fraction */
+Fraction random_fraction();
+Fraction cryptorandom_fraction();	/* Cryptographically secure version */
+
+/* Get time as Fraction */
+Fraction time_fraction();
 #endif

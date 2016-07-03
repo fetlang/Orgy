@@ -1,5 +1,5 @@
 import shlex
-import error
+from error import*
 import numparse
 import ast
 import keywords
@@ -10,7 +10,7 @@ class Token:
 	def __init__(self, kind, raw_value, value, line):
 		# Kind of token
 		self.kind = kind
-		assert self.kind in ["keyword", "fraction-literal", "chain-literal", "identifier", "pronoun"]
+		assert self.kind in ["keyword", "fraction-literal", "chain-literal", "identifier", "pronoun", "ignorable"]
 		# The raw value
 		self.raw_value = raw_value
 		# What the raw_value actually means
@@ -19,7 +19,7 @@ class Token:
 		self.line = line
 
 
-class Tokenizer:
+class Lexer:
 	# Take in raw source code
 	def __init__(self, sourcecode):
 		
@@ -32,7 +32,9 @@ class Tokenizer:
 		self._split()
 		self._remove_gags()
 		self._tokenize()
+		self._fix_pronouns()
 
+	def printout(self):
 		# Print out
 		for i in self.tokens:
 			print("({},{},{},{})".format(i.kind, i.raw_value, i.value, i.line))
@@ -82,7 +84,6 @@ class Tokenizer:
 
 		# Go through lines
 		for line in self.words:
-			#print(line)
 			line_number += 1
 
 			# Go through line
@@ -90,10 +91,8 @@ class Tokenizer:
 			while i < len(line):
 				word = line[i]
 
-
 				# Convert keyword to token
 				if word.lower() in keywords.base_words:
-					print("Probable:{}".format(word))
 					j = 0
 					# Look for full keyword
 					while (i + 1 < len(line)) and " ".join([word,line[i+1]]).lower() in keywords.keywords:
@@ -102,11 +101,9 @@ class Tokenizer:
 						j += 1
 					# False alarm - not actually a keyword
 					if word.lower() not in keywords.keywords:
-						print("Not lol:{}".format(word))
 						i -= j
 					# Add as token
 					else:
-						print("Confirm:{}".format(word))
 						self.tokens.append(Token("keyword", word, word.lower(), line_number))
 						i += 1
 						continue
@@ -130,7 +127,7 @@ class Tokenizer:
 					# Join quotes that were unfortunate to be wrongly separated by an escapes quote
 					while i < len(line) and line[i][-2] == '\\':
 						if i >= len(line):
-							raise error.OrgyTokenizerError("Multiline quotes are not supported (line {})".format(line_number))
+							raise OrgyLexerError("Multiline quotes are not supported (line {})".format(line_number))
 						buffer += line[i + 1]
 						i += 1
 
@@ -140,23 +137,19 @@ class Tokenizer:
 					# Define token as chain literal
 					self.tokens.append(Token("chain-literal", buffer, quote, line_number))
 
-				# Check for non-posessive pronoun
-				elif word.lower() in keywords.dictionary["objective pronouns"] or word.lower() in keywords.dictionary["reflexive pronouns"]:
-					self.tokens.append(Token("pronoun", word, word.lower(), line_number))
-
 				# Convert names or possesive pronouns to token
 				else:
 					name_start = i
 					# Continue until start of literal is found
-					while i < len(line) -1 and line[i + 1][0] != '"' and not numparse.within_number(line[i+1]):
+					while i < len(line) - 1 and line[i + 1][0] != '"' and not numparse.within_number(line[i+1]):
 						# Check if there is a beginning of a keyword
 						if line[i + 1].lower() in keywords.base_words:
 							# Oh shit, there is, What we gonna do?
 							buf = ""
 							k = i + 1
 							it_is_a_keyword = False
-							while k<len(line) and line[k].lower() in keywords.base_words:
-								buf += line[k]+" "
+							while k < len(line) and line[k].lower() in keywords.base_words:
+								buf += line[k] + " "
 								# Check if the buffer matches a keyword
 								if buf[0:-1].lower() in keywords.keywords:
 									# oh shiiiiiiiiit whadup it's a keyword
@@ -170,11 +163,36 @@ class Tokenizer:
 					self.tokens.append(Token("identifier", name, name[0:name.index("'") if "'" in name else len(name)].lower(), line_number))
 				i += 1
 
+	# Make pronouns known as such and strip trailing identifiers
+	def _fix_pronouns(self):
+		for i in range(len(self.tokens)):
+			token = self.tokens[i]
+			if token.value in keywords.pronouns:
+				token.kind = "pronoun"
+
+				# Check for possession and deal with it
+				if token.value in keywords.dictionary["possessive reflexive"] or token.value in keywords.dictionary["possessive"]:
+					# Raise error if no following identifier
+					if i+1 >= len(self.tokens) or self.tokens[i+1].kind != "identifier" or self.tokens[i+1].line != token.line:
+						raise OrgyLexerError("{}: Expected identifier on same line after {}".format(token.line, token.raw_value))
+					# Remove possessives
+					if token.value in keywords.dictionary["possessive reflexive"]:
+						token.value = keywords.dictionary["reflexive"][keywords.dictionary["possessive reflexive"].index(token.value)]
+					else:
+						token.value = keywords.dictionary["objective"][keywords.dictionary["possessive"].index(token.value)]
+					self.tokens[i + 1].kind = "ignorable"
 
 # Test
 if __name__ == "__main__":
-	Tokenizer("""UNGAG
-	MORE PLEASE
-	SPANK RICHARD STALLMAN NINE HUNDRED TIMES
-	HAVE LINUS TORVALDS WORSHIP HIM now "what is going on \\" here?"
+	a = Lexer("""GAG
+	This is a sample program
+	UNGAG
+
+	Lick Carl
+	Lick Jenny
+	until Jenny is over forty
+		have Jenny lick Carl's dick
+		have Carl worship her feet
+	more please
 	""")
+	a.printout()
