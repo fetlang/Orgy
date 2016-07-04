@@ -4,6 +4,8 @@
 `ARCHIMEDES` - 355/113, read only, male  
 `CHRONOS` - current UNIX time, read only, male  
 `ERIS` - random fraction, read only, female  
+`BRUCE SCHNEIER` - cryptographically secure random fraction, read only, 
+male
 
 ## Streams
 `MISTRESS` - stdin, female  

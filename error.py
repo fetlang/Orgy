@@ -10,3 +10,7 @@ class OrgyNumberError(OrgyError):
 
 class OrgyLexerError(OrgyError):
 	pass
+
+
+class OrgyParseError(OrgyError):
+	pass
