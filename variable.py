@@ -35,5 +35,5 @@ builtin_variables = [Variable("NAUGHTY", "fraction", value="construct_fraction(0
 			 Variable("CHRONOS", "fraction", "time_fraction()","male","r"),
 			 Variable("ERIS", "fraction","random_fraction()","female","r"),
 			 Variable("BRUCE SCHNEIER", "fraction", "cryptorandom_fraction()", "male", "r"),
-			 Variable("MISTRESS", "stream", 0, "female","rw"),
-			 Variable("SLAVE", "stream", 1, "male", "rw")]
+			 Variable("MISTRESS", "stream", "0", "female","rw"),
+			 Variable("SLAVE", "stream", "1", "male", "rw")]

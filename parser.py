@@ -1,5 +1,6 @@
 import keywords
 import random
+import fraction
 from variable import*
 from error import *
 
@@ -8,10 +9,10 @@ from error import *
 class Node:
 	def __init__(self, kind, subkind=None, value=None, raw_value=None, line=None, children=None):
 		self.kind = kind
-		assert self.kind in ["root", "literal", "safeword","variable", "operator", "comparison", "flow"]
+		assert self.kind in ["root", "literal", "safeword", "variable", "operator", "comparison", "flow"]
 		# Subcategory of token
 		self.subkind = subkind
-		assert self.subkind in [None, "fraction", "chain", "objective", "reflexive"]\
+		assert self.subkind in [None, "fraction", "chain"]\
 			   or self.subkind in keywords.operators
 
 		# What was literally written by the programmer
@@ -38,14 +39,34 @@ class Parser:
 		# syntax tree
 		self.variables = builtin_variables
 		self.tokens = tokens
-		tree = Node("root")
-		self._parse(tree)
+		self.tree = Node("root")
+		self._parse(self.tree)
 		self.safewords = []
 
 	def _token_to_node(self, token, line=None):
 		if token.kind == "identifier":
 			node = Node("variable", raw_value=token.raw_value, value=token.value, line=token.line)
 
+	# Return a variable searched
+	# Create variable if not found
+	def _find_variable(self, name, kind, line):
+		for i in self.variables:
+			if i.name == name:
+				# Assure kinds match, fraction to fraction, and chain/stream to chain
+				if (kind == "fraction" and i.kind != "fraction") or (kind == "chain" and i.kind =="fraction"):
+					raise OrgyParseError("{}: '{}' is a {}, not a {}".format(line, name, i.kind, kind))
+				return name
+
+		# Not found, so create
+		self.variables.append(name, kind)
+		return self.variables[-1]
+
+	# Find the last accessed variable of that gender or None
+	def _find_last_of_gender(self, var_list, gender):
+		for i in var_list[::-1]:
+			if i.gender in [None, gender]:
+				i.gender = gender
+				return i
 
 	def _parse(self, root):
 		if_block = 0
@@ -53,13 +74,69 @@ class Parser:
 		get_scope = lambda: if_block + while_block
 
 		# Go through tokens
-		for i in range(len(self.tokens)):
-			token = self.tokens[i]
+		self.i = 0
+		while self.i < len(self.tokens):
+			token = self.tokens[self.i]
 			
 			if token.kind == "keyword":
 
 				# Basic operation
-				if token.value in ["have","make"] + keywords.operators:
-					root.append(Node("operation", line=token.line))
-					if token.value == "have":
-						root[-1].insert(self._token_to_node(self.tokens[i+1]))
+				if token.value in ["have","make"] + keywords.dictionary["operators"]:
+					rho = None
+					lho = None
+					operator = None
+					if token.value in ["have", "make"]:
+						# Interpret format like HAVE/MAKE <RHO/LHO> OPERATOR <LHO/[RHO]>
+						if self.i+1 < len(self.tokens) and self.tokens[self.i+1].line == token.line:
+							rho = self.tokens[self.i+1]
+							if self.i+2 < len(self.tokens) and self.tokens[self.i+2].line == token.line:
+								operator = self.tokens[self.i+2]
+								if self.i+3 < len(self.tokens) and self.tokens[self.i+3].line == token.line:
+									lho = self.tokens[self.i+3]
+									self.i += 3
+								elif token.value=="have":
+									raise OrgyParseError("{}: expected operand after operator".format(token.line))
+								else:
+									self.i += 2
+							else:
+								raise OrgyParseError("{}: expected operator after operand".format(token.line))
+						else:
+							raise OrgyParseError("{}: expected operand after '{}'".format(token.line, token.raw_value))
+						if token.value == "make":
+							temp = lho
+							lho = rho
+							rho = temp
+					else:
+						# Interpret format like OPERATOR LHO [X TIMES]
+						operator = token
+						if self.i + 1 < len(self.tokens) and self.tokens[self.i + 1].line == token.line:
+							lho = self.tokens[self.i+1]
+							if self.i + 2 < len(self.tokens) and self.tokens[self.i + 2].line == token.line:
+								if isinstance(self.tokens[self.i+2].value, fraction.Fraction):
+									rho = self.tokens[self.i+2]
+									if not (self.i + 3 < len(self.tokens) and self.tokens[self.i + 3].line == token.line and
+										self.tokens[self.i+3].value == "times"):
+										raise OrgyParseError("{} expected times after RHO".format(token.line))
+									self.i += 3
+								else:
+									raise OrgyParseError("{}: only fraction literals are valid RHO's without make/have".format(token.line))
+							else:
+								self.i += 2
+
+					# Make assertions
+					if lho.kind not in ["pronoun", "identifier"]:
+						raise OrgyParseError("{}: LHO's can only be pronouns or identifiers".format(token.line))
+					if rho is not None:
+						if rho.kind not in ["pronoun", "identifier", "fraction-literal", "chain-literal"]:
+							raise OrgyParseError("{}: LHO's can only be pronouns, identifiers, or literals".format(token.line))
+						if token.value == "make" and rho.kind == "fraction-literal":
+							raise OrgyParseError("{}: RHO cannot be a fraction literal in this context".format(token.line))
+					elif token.value == "have":
+						raise OrgyParseError("{}: RHO needed for 'HAVE'".format(token.line))
+					if token.value == "have" and rho.kind in ["fraction-literal", "chain-literal"]:
+						raise OrgyParseError("{}: RHO cannot be a literal in this context".format(token.line))
+					if operator.value not in keywords.dictionary["operators"]:
+						raise OrgyError("{}: '{}' is not an operator".format(token.line, operator.raw_value))
+
+					# We know the lho, operator, and rho, so we can parse generically now
+			self.i += 1

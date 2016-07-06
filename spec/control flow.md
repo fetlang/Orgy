@@ -18,7 +18,7 @@
     MORE PLEASE
 
 ## Safewords
-Safewords allow you to exit a scope prematurely. It is 
+Safewords allow you to exit a scope prematurely.
 
 `DECLARE` can only be used in the global scope. `WITH` can only be used after an a line
 containing `IF`, `WHILE`, or `UNTIL`
@@ -26,7 +26,7 @@ containing `IF`, `WHILE`, or `UNTIL`
     DECLARE SAFEWORD <safeword>
     ...
     [<safeword>]
-fafsfd
+
 
     [IF | WHILE | UNTIL] <lho> [COMPARISON] <rho>
     WITH SAFEWORD <safeword>
