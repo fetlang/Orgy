@@ -2,7 +2,10 @@
 #include <stdlib.h>
 #include "fraction_math.h"
 #include "error.h"
-#define POW_ACCURACY 256
+#define POW_ACCURACY (1<<8)	/*256 */
+#define REDUCTION_ACCURACY (1<<20)	/*one million */
+
+/* Instill compatibility between ANSI/C99 */
 #if __STDC_VERSION__ >= 199901L
 #define abs llabs
 #define pow powl
@@ -12,8 +15,6 @@
 #define long_double double
 #endif
 
-
-#include <stdio.h>
 
 void reduce_fraction(Fraction * a)
 {
@@ -34,10 +35,15 @@ void reduce_fraction(Fraction * a)
 		return;
 	}
 
-	/* Reduce if numerator is multiple of denominator */
+	/* Reduce if numerator and denominator are multiples of each other */
 	if (a->num % a->den == 0) {
 		a->num /= a->den;
 		a->den = 1;
+		return;
+	}
+	if (a->den % a->num == 0) {
+		a->den /= a->num;
+		a->num = 1;
 		return;
 	}
 
@@ -49,14 +55,16 @@ void reduce_fraction(Fraction * a)
 
 	/* Get maximum */
 	max = (abs(a->num) < a->den ? a->num : a->den) / 2 + 1;
+	max = max > 0 ? max : -max;
+
+	/* Reduce Max if too big */
+	max = (max > REDUCTION_ACCURACY) ? (REDUCTION_ACCURACY) : max;
 
 	/* Reduce by odd numbers */
-	if (max < 10000000) {
-		for (i = 3; i < max; i += 2) {
-			while (((a->num % i) == 0) && ((a->den % i) == 0)) {
-				a->num /= i;
-				a->den /= i;
-			}
+	for (i = 3; i < max; i += 2) {
+		while (((a->num % i) == 0) && ((a->den % i) == 0)) {
+			a->num /= i;
+			a->den /= i;
 		}
 	}
 

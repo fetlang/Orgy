@@ -40,16 +40,14 @@ static int64_t cryptorandom64()
 {
 	FILE *urandom = fopen("/dev/urandom", "r");
 	int64_t result = 0;
-	int c;
+	unsigned int i;
 
 	if (urandom == NULL) {
-		runtime_error("Could not access /dev/urandom");
+		runtime_error("could not access /dev/urandom");
 	}
 
-	for (unsigned int i = 0; i <= sizeof(result); i++) {
-		do {
-			c = (signed char) fgetc(urandom);
-		} while (c < 0);
+	for (i = 0; i <= sizeof(result); i++) {
+		int c = (signed char) fgetc(urandom);
 		result += (result << 8) | ((int64_t) (c & 255));
 	}
 

@@ -1,10 +1,14 @@
 #include "chain.h"
 #include "error.h"
 #include "fraction_math.h"
-#include <tgmath.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#if defined(__cplusplus) && __cplusplus <= 199711L
+#include <math.h>
+#else
+#include <tgmath.h>
+#endif
 
 void init_chain(Chain * chain)
 {
@@ -123,11 +127,10 @@ void chain_to_stream(Chain chain, FILE * stream)
 
 void append_stream_to_chain(Chain * chain, FILE * stream)
 {
-	/* Initiate character to something not important */
-	char character = 'T';
+	char character;
 
 	/* While not end of file or end of line */
-	while (character != '\n' && character != EOF) {
+	do {
 
 		/* Get character from stream */
 		character = (char) fgetc(stream);
@@ -136,7 +139,7 @@ void append_stream_to_chain(Chain * chain, FILE * stream)
 		append_flink_to_chain(chain,
 				      construct_fraction((FractionInt)
 							 character, 1));
-	}
+	} while (character != '\n' && character != EOF);
 }
 
 static void num_to_cstr(char *str, FractionInt num)
@@ -175,9 +178,9 @@ static void num_to_cstr(char *str, FractionInt num)
 		strcpy(str, big_numbers[(FractionInt) log10(num) / 3 - 1]);
 		/* Anything else returns an error */
 	} else {
-		fprintf(stderr, "(%ji)", num);
 		runtime_error
-		    ("num not valid for num_to_cstr(this shouldn't happen)");
+		    ("num(%ji) not valid for num_to_cstr(this shouldn't happen)",
+		     num);
 	}
 }
 

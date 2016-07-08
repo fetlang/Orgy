@@ -5,7 +5,7 @@
 #include <stdio.h>
 int main()
 {
-/*
+
 	// Define chains
 	Chain a;
 	Fraction b;
@@ -28,14 +28,15 @@ int main()
 		chain_to_stream(a, stdout);
 		printf("\n\n");
 	}
-*/
+/*
 	Fraction f;
-	for (int i = 0; i < 10; i++) {
+	int i;
+	for (i = 0; i < 10; i++) {
 		f = cryptorandom_fraction();
 		printf("%ji/%ji\n", f.num, f.den);
 	}
 
-
+*/
 
 
 
