@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "chain_math.h"
+#include "statistics.h"
 #include "fraction_math.h"
 #include "error.h"
 

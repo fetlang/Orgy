@@ -1,4 +1,5 @@
 import keywords
+import operators
 import random
 import fraction
 from variable import*
@@ -12,7 +13,7 @@ class Node:
 		assert self.kind in ["root", "literal", "safeword", "variable", "operator", "comparison", "flow"]
 		# Subcategory of token
 		self.subkind = subkind
-		assert self.subkind in [None, "fraction", "chain"]\
+		assert self.subkind in [None, "fraction", "chain", "stream"]\
 			   or self.subkind in keywords.operators
 
 		# What was literally written by the programmer
@@ -67,11 +68,13 @@ class Parser:
 			if i.gender in [None, gender]:
 				i.gender = gender
 				return i
+		return None
 
 	def _parse(self, root):
 		if_block = 0
 		while_block = 0  # Includes both while and until
 		get_scope = lambda: if_block + while_block
+		var_access_list = []
 
 		# Go through tokens
 		self.i = 0
@@ -136,7 +139,61 @@ class Parser:
 					if token.value == "have" and rho.kind in ["fraction-literal", "chain-literal"]:
 						raise OrgyParseError("{}: RHO cannot be a literal in this context".format(token.line))
 					if operator.value not in keywords.dictionary["operators"]:
-						raise OrgyError("{}: '{}' is not an operator".format(token.line, operator.raw_value))
+						raise OrgyParseError("{}: '{}' is not an operator".format(token.line, operator.raw_value))
+
+					# Handle reflexive pronouns:
+					if lho.kind == "pronoun" and lho.value in keywords.dictionary["reflexive"]:
+						if token.value == "have":
+							lho = rho
+						else:
+							raise OrgyParseError("{}: didn't expect reflexive pronoun here".format(token.line))
+					elif rho.kind == "pronoun" and rho.value in keywords.dictionary["reflexive"]:
+						if token.value == "make":
+							rho = lho
+						else:
+							raise OrgyParseError("{}: didn't expect reflexive pronoun here".format(token.line))
+
+
+					# Convert operator into Node
+					for op in operators.operators:
+						if operator.value == op.name:
+							operator = Node("operator", None, op, operator.raw_value)
+							break
+
+					# Convert operands in to Nodes
+					operands = []value =
+					for operand in [lho, rho]:
+						if operand is None:
+
+						# Handle objective pronouns
+						elif operand.kind == "pronoun":
+							gender = None
+							if operand.value == "them":
+								gender = "neutral"
+							elif operand.value == "him":
+								gender= "male"
+							elif operand.value == "her":
+								gender ="female"
+							elif operand.value = "it":
+								gender = "nonperson"
+							else:
+								raise OrgyParseError("{}: no gender for {}".format(token.line, operand.value))
+							var = self._find_last_of_gender(var_access_list, gender)
+							if var is None:
+								raise OrgyParseError("{}: no gender-appropriate variable found".format(token.line))
+							if var.subkind is None:
+								raise OrgyParseError("{}: subkind is None".format(token.line))
+
+							# Make variable node from pronoun
+							operands.append(Node("variable", var.subkind, var, operand.raw_value, operand.line))
+						elif operand.kind == "identifier":
+							operands.append(Node("variable", operand.subkind, ))
 
 					# We know the lho, operator, and rho, so we can parse generically now
+
+
+
+
+
+
 			self.i += 1

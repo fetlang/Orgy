@@ -10,7 +10,7 @@ class Transpiler:
 		self.ccode="""#include "compatibility.h"
 #include "fraction_math.h"
 #include "chain.h"
-#include "chain_math.h"
+#include "statistics.h"
 #include <stdio.h>
 int main(){
 Chain WRITING_BUFFER;

@@ -1,5 +1,5 @@
-#ifndef ORGY_CHAIN_MATH_H_
-#define ORGY_CHAIN_MATH_H_
+#ifndef ORGY_STATISTICS_H_
+#define ORGY_STATISTICS_H_
 #include "fraction.h"
 #include "chain.h"
 
